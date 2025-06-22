@@ -20,12 +20,4 @@ export class AppComponent implements OnInit {
       error: (err) => console.error('Error:', err)
     });
   }
-  /*constructor(private servicio-url: DocumentoService) {}
-
-  ngOnInit(): void {
-    this.servicio-url.getDocumentos().subscribe({
-      next: (res) => this.respuesta = res,
-      error: (err) => console.error('Error:', err)
-    });
-  }*/
 }

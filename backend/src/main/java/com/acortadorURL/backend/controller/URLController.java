@@ -12,7 +12,7 @@ public class URLController {
 
     @GetMapping
     public String listar() {
-        return "Perfil Foto";
+        return "Perfil Foto o Usuario";
     }
 
 }
