@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.springframework.http.HttpStatus;
@@ -40,22 +42,20 @@ public class URLController {
 
     @GetMapping("/verificar")
     public ResponseEntity<String> verificarUrl(@RequestParam String url) {
-        // 1. Verifica que no esté vacío
         if (url == null || url.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("error: vacío");
         }
 
-        // 2. Verifica que tenga formato válido
         String regex = "^(https?://)([\\w.-]+)(:[0-9]+)?(/.*)?$";
         if (!Pattern.matches(regex, url)) {
             return ResponseEntity.badRequest().body("error: formato");
         }
 
         try {
-            // 3. Verifica si la URL responde
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestMethod("HEAD");
-            connection.setConnectTimeout(3000); // 3 segundos
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.setConnectTimeout(3000);
             connection.connect();
 
             int code = connection.getResponseCode();
@@ -94,32 +94,44 @@ public class URLController {
         }
     }
 
-    @GetMapping("/{shortId}")
+    @GetMapping("/r/{shortId}")
     public void redirigir(@PathVariable String shortId, HttpServletResponse response) throws IOException {
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
                 .getReference("urls")
                 .child(shortId);
 
+        final CompletableFuture<String> future = new CompletableFuture<>();
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String originalUrl = snapshot.child("originalUrl").getValue(String.class);
-                    try {
-                        response.sendRedirect(originalUrl);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    future.complete(originalUrl);
                 } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    future.complete(null);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                future.completeExceptionally(new RuntimeException("Error al acceder a Firebase"));
             }
         });
+
+        try {
+            String originalUrl = future.get(3, TimeUnit.SECONDS); // Espera hasta 3 segundos
+
+            if (originalUrl != null) {
+                response.sendRedirect(originalUrl);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "URL no encontrada");
+            }
+
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al redirigir");
+        }
     }
+
 }

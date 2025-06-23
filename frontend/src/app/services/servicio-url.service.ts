@@ -17,12 +17,13 @@ export class ServicioURLService {
     return this.http.get(this.apiUrl, { responseType: 'text' });
   }
 
-  verificarUrl(url: string): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/URL/verificar`, {
-      params: { url },
-      responseType: 'text'
-    });
-  }
+  verificarUrl(url: string): Observable<string> {
+  const urlCodificada = encodeURIComponent(url);
+  return this.http.get(`http://localhost:8080/api/URL/verificar?url=${urlCodificada}`, {
+    responseType: 'text'
+  });
+}
+
 
   acortarUrl(url: string): Observable<string> {
     return this.http.post('http://localhost:8080/api/URL/acortar', { url }, { responseType: 'text' });

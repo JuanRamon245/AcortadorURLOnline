@@ -29,8 +29,14 @@ export class PaginaInicialComponent {
         // Ahora llamamos al backend para acortar y guardar la URL
         this.URLServicio.acortarUrl(this.urlInput).subscribe({
           next: (urlCorta) => {
-            console.log('URL acortada:', urlCorta);
-            // Aquí puedes mostrarla en el HTML o copiarla al portapapeles, etc.
+
+            const id = urlCorta.split('/').pop();
+            const urlFinal = `http://localhost:8080/api/URL/r/${id}`;
+            console.log('URL acortada:', urlFinal);
+
+            this.router.navigate(['/pagina-urlcorta-generada'], {
+              state: { url: urlFinal}
+            });
           },
           error: (err) => {
             console.log('Error al acortar la URL');

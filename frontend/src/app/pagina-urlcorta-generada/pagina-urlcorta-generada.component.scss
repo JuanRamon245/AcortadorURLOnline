@@ -1,0 +1,66 @@
+.contenedor-acortador {
+  padding: 8rem 1rem;
+  text-align: center;
+  max-width: 70rem;
+  margin: 5rem auto;
+  height: auto;
+
+  h2 {
+    font-size: 2rem;
+    color: rgb(96, 71, 71);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-bottom: 2rem;
+  }
+
+  .formulario-acortador {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .input-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    padding-left: 10px;
+  }
+
+  label {
+    font-size: 2rem;
+    color: rgb(96, 71, 71);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+input {
+  width: 100%;
+  height: 3.2rem;
+  padding: 0 1rem;
+  font-size: 1.4rem;
+  border-radius: 6px 0 0 6px;
+  border: 1px solid #ccc;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  box-sizing: border-box;
+}
+
+button {
+  height: 3.2rem;
+  background-color: rgb(81, 134, 200);
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+  button:hover {
+    background-color: rgb(60, 110, 170);
+  }
+}

@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   respuesta: string = 'Cargando...';
 
   constructor (private servicioURL : ServicioURLService ) { }
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.servicioURL.getDocumentos().subscribe({
       next: (res) => this.respuesta = res,
       error: (err) => console.error('Error:', err)
