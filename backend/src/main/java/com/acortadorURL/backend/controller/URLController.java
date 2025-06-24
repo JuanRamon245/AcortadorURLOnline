@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import com.acortadorURL.backend.clases.UrlRequest;
 import com.google.firebase.database.DataSnapshot;
@@ -76,10 +77,7 @@ public class URLController {
 
             String shortId = UUID.randomUUID().toString().substring(0, 6);
 
-            DatabaseReference ref = FirebaseDatabase
-                    .getInstance()
-                    .getReference("urls")
-                    .child(shortId);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
 
             Map<String, Object> data = new HashMap<>();
             data.put("originalUrl", originalUrl);
@@ -96,10 +94,7 @@ public class URLController {
 
     @GetMapping("/r/{shortId}")
     public void redirigir(@PathVariable String shortId, HttpServletResponse response) throws IOException {
-        DatabaseReference ref = FirebaseDatabase
-                .getInstance()
-                .getReference("urls")
-                .child(shortId);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
 
         final CompletableFuture<String> future = new CompletableFuture<>();
 
@@ -121,7 +116,7 @@ public class URLController {
         });
 
         try {
-            String originalUrl = future.get(3, TimeUnit.SECONDS); // Espera hasta 3 segundos
+            String originalUrl = future.get(3, TimeUnit.SECONDS);
 
             if (originalUrl != null) {
                 response.sendRedirect(originalUrl);
@@ -134,4 +129,71 @@ public class URLController {
         }
     }
 
+    @PostMapping("/registrarUsuario")
+    public ResponseEntity<String> registrarUsuario(@RequestBody Map<String, String> datos) {
+        try {
+            String nombre = datos.get("nombre");
+            String correo = datos.get("correo");
+            String contrasena = datos.get("contrasena");
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("usuarios")
+                    .child(correo.replace('.', '_'));
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("nombre", nombre);
+            data.put("correo", correo);
+            data.put("contrasena", contrasena);
+
+            ref.setValueAsync(data);
+
+            return ResponseEntity.ok("Usuario registrado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario");
+        }
+    }
+
+    @PostMapping("/accederUsuario")
+    public DeferredResult<ResponseEntity<String>> iniciarSesion(@RequestBody Map<String, String> datos) {
+        DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
+
+        String correo = datos.get("correo");
+        String contrasena = datos.get("contrasena");
+
+        if (correo == null || contrasena == null) {
+            resultado.setResult(ResponseEntity.badRequest().body("Correo o contraseña faltan"));
+            return resultado;
+        }
+
+        String correoNormalizado = correo.replace(".", "_");
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(correoNormalizado);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    resultado.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado"));
+                    return;
+                }
+
+                String contrasenaGuardada = snapshot.child("contrasena").getValue(String.class);
+
+                if (contrasena.equals(contrasenaGuardada)) {
+                    resultado.setResult(ResponseEntity.ok("Inicio de sesión exitoso"));
+                } else {
+                    resultado.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta"));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error al acceder a Firebase: " + error.getMessage()));
+            }
+        });
+
+        return resultado;
+    }
 }

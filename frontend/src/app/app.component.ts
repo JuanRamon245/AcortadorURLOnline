@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ServicioURLService } from './services/servicio-url.service';
 
 @Component({
@@ -13,11 +13,15 @@ export class AppComponent implements OnInit {
 
   respuesta: string = 'Cargando...';
 
-  constructor (private servicioURL : ServicioURLService ) { }
+  constructor (private servicioURL : ServicioURLService, private router: Router) { }
   ngOnInit(): void {
     this.servicioURL.getDocumentos().subscribe({
       next: (res) => this.respuesta = res,
       error: (err) => console.error('Error:', err)
     });
+  }
+
+  redirigirALogin() {
+    this.router.navigate(['/pagina-login']);
   }
 }

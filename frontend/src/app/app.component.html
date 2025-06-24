@@ -2,7 +2,7 @@
     <div class="filaSuperior">
         <div class="mensajeEnlace">TUS URLs</div>
 
-        <p class="perfilUsuario">{{ respuesta }}</p>
+        <p class="perfilUsuario" (click)="redirigirALogin()">{{ respuesta }}</p>
     </div>
     <div class="paginaInferior">
         <router-outlet></router-outlet>

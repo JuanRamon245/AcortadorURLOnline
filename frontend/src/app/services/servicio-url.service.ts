@@ -18,15 +18,24 @@ export class ServicioURLService {
   }
 
   verificarUrl(url: string): Observable<string> {
-  const urlCodificada = encodeURIComponent(url);
-  return this.http.get(`http://localhost:8080/api/URL/verificar?url=${urlCodificada}`, {
-    responseType: 'text'
-  });
-}
+    const urlCodificada = encodeURIComponent(url);
+    return this.http.get(`http://localhost:8080/api/URL/verificar?url=${urlCodificada}`, {
+      responseType: 'text'
+    });
+  }
 
 
   acortarUrl(url: string): Observable<string> {
     return this.http.post('http://localhost:8080/api/URL/acortar', { url }, { responseType: 'text' });
   }
 
+  registrarse(nombre: string, correo: string, contrasena: string): Observable<string> {
+    const body = { nombre, correo, contrasena };
+    return this.http.post('http://localhost:8080/api/URL/registrarUsuario', body, { responseType: 'text' });
+  }
+
+  acceder(correo: string, contrasena: string): Observable<string> {
+    const body = { correo, contrasena };
+    return this.http.post('http://localhost:8080/api/URL/accederUsuario', body, { responseType: 'text' });
+  }
 }
