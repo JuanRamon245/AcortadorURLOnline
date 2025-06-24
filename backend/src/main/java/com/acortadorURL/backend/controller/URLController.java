@@ -30,15 +30,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/URL")
 public class URLController {
 
     @GetMapping
-    public String listar() {
-        return "Perfil Foto o Usuario";
+    public ResponseEntity<String> getUsuario(HttpSession session) {
+        Object usuario = session.getAttribute("usuarioNombreLogueado");
+        if (usuario != null) {
+            return ResponseEntity.ok("" + usuario);
+        } else {
+            return ResponseEntity.status(401).body("Registrarse");
+        }
     }
 
     @GetMapping("/verificar")
@@ -130,30 +136,54 @@ public class URLController {
     }
 
     @PostMapping("/registrarUsuario")
-    public ResponseEntity<String> registrarUsuario(@RequestBody Map<String, String> datos) {
+    public DeferredResult<ResponseEntity<String>> registrarUsuario(@RequestBody Map<String, String> datos,
+            HttpSession session) {
+        DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
+
         try {
             String nombre = datos.get("nombre");
             String correo = datos.get("correo");
             String contrasena = datos.get("contrasena");
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("usuarios")
-                    .child(correo.replace('.', '_'));
+            String correoNormalizado = correo.replace(".", "_");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("usuarios").child(correoNormalizado);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        resultado.setResult(ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("Ya existe un usuario con ese correo"));
+                    } else {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("nombre", nombre);
+                        data.put("correo", correo);
+                        data.put("contrasena", contrasena);
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("nombre", nombre);
-            data.put("correo", correo);
-            data.put("contrasena", contrasena);
+                        ref.setValueAsync(data);
+                        session.setAttribute("usuarioNombreLogueado", nombre);
+                        session.setAttribute("usuarioCorreoLogueado", correo);
+                        resultado.setResult(ResponseEntity.ok("Usuario registrado correctamente"));
+                    }
+                }
 
-            ref.setValueAsync(data);
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body("Error al acceder a Firebase: " + error.getMessage()));
+                }
+            });
 
-            return ResponseEntity.ok("Usuario registrado correctamente");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar usuario");
+            resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al registrar usuario: " + e.getMessage()));
         }
+
+        return resultado;
     }
 
     @PostMapping("/accederUsuario")
-    public DeferredResult<ResponseEntity<String>> iniciarSesion(@RequestBody Map<String, String> datos) {
+    public DeferredResult<ResponseEntity<String>> iniciarSesion(@RequestBody Map<String, String> datos,
+            HttpSession session) {
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
         String correo = datos.get("correo");
@@ -166,9 +196,7 @@ public class URLController {
 
         String correoNormalizado = correo.replace(".", "_");
 
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("usuarios")
-                .child(correoNormalizado);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("usuarios").child(correoNormalizado);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -179,8 +207,11 @@ public class URLController {
                 }
 
                 String contrasenaGuardada = snapshot.child("contrasena").getValue(String.class);
+                String nombre = snapshot.child("nombre").getValue(String.class);
 
                 if (contrasena.equals(contrasenaGuardada)) {
+                    session.setAttribute("usuarioNombreLogueado", nombre);
+                    session.setAttribute("usuarioCorreoLogueado", correo);
                     resultado.setResult(ResponseEntity.ok("Inicio de sesión exitoso"));
                 } else {
                     resultado.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta"));
@@ -196,4 +227,11 @@ public class URLController {
 
         return resultado;
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Sesión cerrada");
+    }
+
 }

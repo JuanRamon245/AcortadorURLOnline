@@ -61,14 +61,14 @@ export class PaginaLoginComponent {
          this.URLServicio.acceder(this.correo, this.contrasena).subscribe({
           next: (respuesta: string) => {
             if (respuesta.includes('Inicio de sesión exitoso')) {
-              this.router.navigate(['/']);
+              window.location.href = '/';
             } else {
               this.mensaje = respuesta;
             }
           },
           error: err => {
             if (err.status === 401) {
-              this.mensaje = err.error; // Usuario no encontrado o contraseña incorrecta
+              this.mensaje = err.error;
             } else {
               this.mensaje = 'Error al intentar iniciar sesión';
             }
@@ -100,10 +100,16 @@ export class PaginaLoginComponent {
           this.URLServicio.registrarse(this.nombre, this.correo, this.contrasena).subscribe({
             next: (respuesta: any) => {
               if (respuesta.includes('Usuario registrado correctamente')) {
-                this.router.navigate(['/']);
+                window.location.href = '/';
               }
             },
-            error: err => this.mensaje = 'Error al registrar usuario'
+            error: err => {
+              if (err.status === 409) {
+                this.mensaje = err.error;
+              } else {
+                this.mensaje = 'Error al registrar usuario';
+              }
+            }
           });
         }
       }

@@ -1,10 +1,24 @@
 <div class="contenedor">
-    <div class="filaSuperior">
-        <div class="mensajeEnlace">TUS URLs</div>
+  <div class="filaSuperior">
+    <div class="mensajeEnlace"
+        [style.visibility]="(respuesta !== 'Registrarse' || estaEnLoginORegistro) ? 'visible' : 'hidden'"
+        (click)="(respuesta !== 'Registrarse' && esHome) ? redirigirURLs() : volverHome()">
+      {{ (respuesta !== 'Registrarse' && esHome) ? 'TUS URLs' : (estaEnLoginORegistro ? 'Volver' : '') }}
+    </div>
 
-        <p class="perfilUsuario" (click)="redirigirALogin()">{{ respuesta }}</p>
-    </div>
-    <div class="paginaInferior">
-        <router-outlet></router-outlet>
-    </div>
+
+    <p class="perfilUsuario" (click)="redirigirALogin()">{{ respuesta }}</p>
+  </div>
+
+  <div class="paginaInferior">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <div class="modal">
+    <button class="cerrar" (click)="cerrarModal()">×</button>
+    <h2>¿Deseas cerrar sesión?</h2>
+    <button (click)="cerrarSesion()">Cerrar sesión</button>
+  </div>
 </div>
