@@ -47,6 +47,16 @@ public class URLController {
         }
     }
 
+    @GetMapping("/ver")
+    public ResponseEntity<String> getCorreo(HttpSession session) {
+        Object correo = session.getAttribute("usuarioCorreoLogueado");
+        if (correo != null) {
+            return ResponseEntity.ok("" + correo);
+        } else {
+            return ResponseEntity.status(401).body("Registrarse");
+        }
+    }
+
     @GetMapping("/verificar")
     public ResponseEntity<String> verificarUrl(@RequestParam String url) {
         if (url == null || url.trim().isEmpty()) {
@@ -79,14 +89,19 @@ public class URLController {
     @PostMapping("/acortar")
     public ResponseEntity<String> acortarUrl(@RequestBody UrlRequest request) {
         try {
-            String originalUrl = request.getUrl();
 
             String shortId = UUID.randomUUID().toString().substring(0, 6);
+
+            String originalUrl = request.getUrl();
+            String correo = request.getCorreo();
+            int usos = 20;
 
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
 
             Map<String, Object> data = new HashMap<>();
             data.put("originalUrl", originalUrl);
+            data.put("correoUsuario", correo);
+            data.put("usos", usos);
 
             ref.setValueAsync(data);
 
@@ -102,14 +117,25 @@ public class URLController {
     public void redirigir(@PathVariable String shortId, HttpServletResponse response) throws IOException {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
 
-        final CompletableFuture<String> future = new CompletableFuture<>();
+        final CompletableFuture<Map<String, Object>> future = new CompletableFuture<>();
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String originalUrl = snapshot.child("originalUrl").getValue(String.class);
-                    future.complete(originalUrl);
+                    Long usos = snapshot.child("usos").getValue(Long.class);
+
+                    if (originalUrl != null && usos != null && usos > 0) {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("originalUrl", originalUrl);
+                        data.put("usos", usos - 1);
+                        future.complete(data);
+                    } else if (usos != null && usos <= 0) {
+                        future.completeExceptionally(new RuntimeException("La URL ya no tiene usos disponibles"));
+                    } else {
+                        future.complete(null);
+                    }
                 } else {
                     future.complete(null);
                 }
@@ -122,16 +148,28 @@ public class URLController {
         });
 
         try {
-            String originalUrl = future.get(3, TimeUnit.SECONDS);
+            Map<String, Object> result = future.get(3, TimeUnit.SECONDS);
 
-            if (originalUrl != null) {
+            if (result != null) {
+                String originalUrl = (String) result.get("originalUrl");
+                Long nuevosUsos = (Long) result.get("usos");
+
+                if (nuevosUsos <= 0) {
+                    ref.removeValueAsync();
+                } else {
+                    ref.child("usos").setValueAsync(nuevosUsos);
+                }
+
                 response.sendRedirect(originalUrl);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "URL no encontrada");
             }
-
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al redirigir");
+            if (e.getMessage().contains("usos disponibles")) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Esta URL ya no tiene usos disponibles");
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al redirigir");
+            }
         }
     }
 

@@ -12,48 +12,59 @@ import { FormsModule } from '@angular/forms';
 })
 export class PaginaInicialComponent {
   urlInput: string = '';
+  correo: string = '';
 
   constructor(private http: HttpClient, private router: Router, private URLServicio: ServicioURLService) {}
 
   acortarUrl() {
-  if (this.urlInput.trim() === '') {
-    console.log('Error: la URL está vacía');
-    return;
-  }
+    if (this.urlInput.trim() === '') {
+      console.log('Error: la URL está vacía');
+      return;
+    }
 
-  this.URLServicio.verificarUrl(this.urlInput).subscribe({
-    next: (res) => {
-      if (res === 'ok') {
-        console.log('URL válida, procediendo a acortar:', this.urlInput);
+    this.URLServicio.getCorreo().subscribe({
+      next: (correoRes) => {
+        this.correo = correoRes;
 
-        // Ahora llamamos al backend para acortar y guardar la URL
-        this.URLServicio.acortarUrl(this.urlInput).subscribe({
-          next: (urlCorta) => {
+        if (this.correo.trim() === '') {
+          console.log('Error: el correo está vacío');
+          return;
+        }
 
-            const id = urlCorta.split('/').pop();
-            const urlFinal = `http://localhost:8080/api/URL/r/${id}`;
-            console.log('URL acortada:', urlFinal);
+        this.URLServicio.verificarUrl(this.urlInput).subscribe({
+          next: (res) => {
+            if (res === 'ok') {
+              console.log('URL válida, procediendo a acortar:', this.urlInput);
 
-            this.router.navigate(['/pagina-urlcorta-generada'], {
-              state: { url: urlFinal}
-            });
+              this.URLServicio.acortarUrl(this.urlInput, this.correo).subscribe({
+                next: (urlCorta) => {
+                  const id = urlCorta.split('/').pop();
+                  const urlFinal = `http://localhost:8080/api/URL/r/${id}`;
+                  console.log('URL acortada:', urlFinal);
+
+                  this.router.navigate(['/pagina-urlcorta-generada'], {
+                    state: { url: urlFinal }
+                  });
+                },
+                error: () => {
+                  console.log('Error al acortar la URL');
+                }
+              });
+
+            } else {
+              console.log('Error en validación:', res);
+            }
           },
-          error: (err) => {
-            console.log('Error al acortar la URL');
+          error: () => {
+            console.log('Error: la URL no es válida o no es accesible');
           }
         });
 
-      } else {
-        console.log('Error en validación:', res);
+      },
+      error: () => {
+        console.log('Usuario no logueado, redirigiendo a login');
+        this.router.navigate(['/pagina-login']);
       }
-    },
-    error: (err) => {
-      // Silenciar el error 400, como pediste antes
-      if (err.status !== 400) {
-        console.log('Error: la URL no es válida o no es accesible');
-      }
-    }
-  });
-}
-
+    });
+  }
 }

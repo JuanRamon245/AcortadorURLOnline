@@ -22,6 +22,7 @@ html, body {
 .mensajeEnlace {
     font-size: 2.5rem;
     margin-left: 1.5rem;
+    padding: 5px;
     color: white;
     cursor: pointer;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -30,9 +31,24 @@ html, body {
 .perfilUsuario {
   font-size: 2.5rem;
   margin-right: 1.5rem;
+  padding: 5px;
   color: white;
   cursor: pointer;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.perfilUsuario:hover {
+  border-radius: 6px;
+  border: none;
+  transition: background-color 0.3s;
+  background-color: rgb(40, 73, 112);
+}
+
+.mensajeEnlace:hover {
+  border-radius: 6px;
+  border: none;
+  transition: background-color 0.3s;
+  background-color: rgb(40, 73, 112);
 }
 
 .paginaInferior {
@@ -54,28 +70,44 @@ html, body {
 
 .modal {
   background: white;
-  padding: 20px 30px;
+  padding: 50px 120px;
   border-radius: 8px;
   position: relative;
   text-align: center;
 }
 
 .modal h2 {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .modal button {
+ 
   padding: 10px 20px;
-  margin-top: 10px;
+  margin-top: 30px;
+  
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   cursor: pointer;
 }
 
 .cerrar {
   position: absolute;
-  top: 8px;
+  top: -25px;
   right: 10px;
   border: none;
   background: transparent;
-  font-size: 24px;
+  font-size: 35px;
   cursor: pointer;
+}
+
+.cerrarSes {
+   height: 3.5rem;
+  background-color: rgb(81, 134, 200);
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
 }

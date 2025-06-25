@@ -10,6 +10,7 @@ import { filter } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
+
 export class AppComponent implements OnInit {
   title = 'frontend';
 
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects;
         this.esHome = url === '/';
-        this.estaEnLoginORegistro = url === '/pagina-login' || url === '/pagina-registro';
+        this.estaEnLoginORegistro = url === '/pagina-login' || url === '/pagina-registro' || url === '/pagina-urlcorta-generada';
       });
   }
 

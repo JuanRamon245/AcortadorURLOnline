@@ -20,6 +20,13 @@ export class ServicioURLService {
     });
   }
 
+  getCorreo(): Observable<string> {
+    return this.http.get('http://localhost:8080/api/URL/ver', {
+      responseType: 'text',
+      withCredentials: true
+    });
+  }
+
   verificarUrl(url: string): Observable<string> {
     const urlCodificada = encodeURIComponent(url);
     return this.http.get(`http://localhost:8080/api/URL/verificar?url=${urlCodificada}`, {
@@ -27,8 +34,8 @@ export class ServicioURLService {
     });
   }
 
-  acortarUrl(url: string): Observable<string> {
-    return this.http.post('http://localhost:8080/api/URL/acortar', { url }, { responseType: 'text' });
+  acortarUrl(url: string, correo: string): Observable<string> {
+    return this.http.post('http://localhost:8080/api/URL/acortar', { url, correo }, { responseType: 'text' });
   }
 
   registrarse(nombre: string, correo: string, contrasena: string): Observable<string> {
