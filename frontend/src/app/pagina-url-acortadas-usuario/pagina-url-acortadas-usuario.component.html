@@ -1,1 +1,37 @@
-<p>pagina-url-acortadas-usuario works!</p>
+<div class="contenedor-cards">
+  <div *ngFor="let url of urls" class="card-url">
+    <p><strong>URL Acortada:</strong> http://localhost:8080/api/URL/r/{{ url.shortId }}</p>
+    <p><strong>URL Original:</strong> {{ url.originalUrl }}</p>
+
+    <div class="input-usos">
+      <label><strong>Usos restantes:</strong></label>
+      <input class="imaginput"
+        type="number"
+        [(ngModel)]="url.nuevosUsos"
+        min="1"
+        max="99"
+        (keydown)="validarInput($event, url)"
+        (paste)="evitarPegar($event)"
+        />
+
+    </div>
+
+    <div class="botones">
+      <button (click)="guardarUsos(url)">Guardar</button>
+      <button (click)="confirmarEliminacion(url.shortId)">Borrar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mensaje" class="notificacion" [ngClass]="tipoMensaje">
+  {{ mensaje }}
+  <span class="material-symbols-outlined icono-refresh">refresh</span>
+</div>
+
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <div class="modal">
+    <button class="cerrar" (click)="cancelarEliminacion()">×</button>
+    <h2>¿Estás seguro de que deseas eliminar esta URL?</h2>
+    <button class="cerrarSes" (click)="eliminarConfirmado()">Eliminar URL</button>
+  </div>
+</div>

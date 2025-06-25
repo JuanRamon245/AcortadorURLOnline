@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects;
         this.esHome = url === '/';
-        this.estaEnLoginORegistro = url === '/pagina-login' || url === '/pagina-registro' || url === '/pagina-urlcorta-generada';
+        this.estaEnLoginORegistro = url === '/pagina-login' || url === '/pagina-registro' || url === '/pagina-urlcorta-generada' || url === '/pagina-url-acortadas-usuario';
       });
   }
 

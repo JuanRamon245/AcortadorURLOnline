@@ -55,5 +55,19 @@ export class ServicioURLService {
     });
   }
 
+  getUrlsDelUsuario(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8080/api/URL/urls-usuario', {
+      withCredentials: true
+    });
+  }
+
+  actualizarUsos(shortId: string, usos: number): Observable<string> {
+    return this.http.put(`http://localhost:8080/api/URL/actualizar-usos/${shortId}`, { usos }, { responseType: 'text' });
+  }
+
+  eliminarUrl(shortId: string): Observable<string> {
+    return this.http.delete(`http://localhost:8080/api/URL/eliminar/${shortId}`, { responseType: 'text' });
+  }
+
 
 }
