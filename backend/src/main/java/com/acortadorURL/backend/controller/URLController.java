@@ -61,6 +61,16 @@ public class URLController {
         }
     }
 
+    @GetMapping("/con")
+    public ResponseEntity<String> getContrasena(HttpSession session) {
+        Object contrasena = session.getAttribute("usuarioContrasenaLogueado");
+        if (contrasena != null) {
+            return ResponseEntity.ok("" + contrasena);
+        } else {
+            return ResponseEntity.status(401).body("Registrarse");
+        }
+    }
+
     @GetMapping("/verificar")
     public ResponseEntity<String> verificarUrl(@RequestParam String url) {
         if (url == null || url.trim().isEmpty()) {
@@ -204,6 +214,7 @@ public class URLController {
                         ref.setValueAsync(data);
                         session.setAttribute("usuarioNombreLogueado", nombre);
                         session.setAttribute("usuarioCorreoLogueado", correo);
+                        session.setAttribute("usuarioContrasenaLogueado", contrasena);
                         resultado.setResult(ResponseEntity.ok("Usuario registrado correctamente"));
                     }
                 }
@@ -254,6 +265,7 @@ public class URLController {
                 if (contrasena.equals(contrasenaGuardada)) {
                     session.setAttribute("usuarioNombreLogueado", nombre);
                     session.setAttribute("usuarioCorreoLogueado", correo);
+                    session.setAttribute("usuarioContrasenaLogueado", contrasena);
                     resultado.setResult(ResponseEntity.ok("Inicio de sesión exitoso"));
                 } else {
                     resultado.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta"));
@@ -340,6 +352,65 @@ public class URLController {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
         ref.removeValueAsync();
         return ResponseEntity.ok("URL eliminada correctamente");
+    }
+
+    @GetMapping("/usuario/datos")
+    public ResponseEntity<Map<String, String>> obtenerDatosUsuario(HttpSession session) {
+        String nombre = (String) session.getAttribute("usuarioNombreLogueado");
+        String correo = (String) session.getAttribute("usuarioCorreoLogueado");
+        String contraseña = (String) session.getAttribute("usuarioContrasenaLogueado");
+
+        if (nombre == null || correo == null || contraseña == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        Map<String, String> datos = new HashMap<>();
+        datos.put("nombre", nombre);
+        datos.put("correo", correo);
+        datos.put("contrasena", contraseña);
+        return ResponseEntity.ok(datos);
+    }
+
+    @PutMapping("/usuario/actualizar")
+    public ResponseEntity<String> actualizarDatosUsuario(@RequestBody Map<String, String> nuevosDatos,
+            HttpSession session) {
+        String correo = (String) session.getAttribute("usuarioCorreoLogueado");
+        System.out.println(correo);
+        if (correo == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autorizado");
+        }
+
+        String nuevoNombre = nuevosDatos.get("nombre");
+        System.out.println(nuevoNombre);
+        String nuevaContrasena = nuevosDatos.get("contrasena");
+        System.out.println(nuevaContrasena);
+
+        if (nuevoNombre == null || nuevaContrasena == null ||
+                nuevoNombre.length() > 20 || nuevaContrasena.length() > 30) {
+            return ResponseEntity.badRequest().body("Datos inválidos");
+        }
+        System.out.println("1");
+
+        String correoCodificado = correo.replace(".", "_");
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(correoCodificado);
+
+        System.out.println(correoCodificado);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("nombre", nuevoNombre);
+        updates.put("contrasena", nuevaContrasena);
+
+        ref.updateChildrenAsync(updates);
+
+        System.out.println("1");
+
+        session.setAttribute("usuarioNombreLogueado", nuevoNombre);
+        session.setAttribute("usuarioContrasenaLogueado", nuevaContrasena);
+
+        return ResponseEntity.ok("Datos actualizados correctamente");
     }
 
 }

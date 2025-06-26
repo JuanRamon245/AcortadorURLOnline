@@ -6,7 +6,12 @@
       {{ (respuesta !== 'Registrarse' && esHome) ? 'TUS URLs' : (estaEnLoginORegistro ? 'Volver' : '') }}
     </div>
 
-    <p class="perfilUsuario" (click)="redirigirALogin()">{{ respuesta }}</p>
+    <p class="perfilUsuario" (click)="toggleMenu()" #menuTrigger>{{ respuesta }}</p>
+
+    <div class="dropdown-menu" *ngIf="mostrarDropdown" #dropdownMenu>
+      <button (click)="abrirModalDatos()">Ver datos</button>
+      <button (click)="abrirModalDesdeDropdown()">Cerrar sesión</button>
+    </div>
   </div>
 
   <div class="paginaInferior">
@@ -15,9 +20,26 @@
 </div>
 
 <div *ngIf="mostrarModal" class="modal-overlay">
-  <div class="modal">
+  <div class="modal" #modalCerrarSesion>
     <button class="cerrar" (click)="cerrarModal()">×</button>
     <h2>¿Deseas cerrar sesión?</h2>
     <button class="cerrarSes" (click)="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</div>
+
+<div *ngIf="mostrarDatos" class="modal-overlay">
+  <div class="modal" #modalDatos>
+    <button class="cerrar" (click)="cerrarModalDatos()">×</button>
+    <h2>Datos del usuario</h2>
+
+    <label><strong>Nombre:</strong></label>
+    <input type="text" [(ngModel)]="nombreUsuario" maxlength="20" />
+
+    <p><strong>Correo:</strong> {{ correoUsuario }}</p>
+
+    <label><strong>Contraseña:</strong></label>
+    <input type="text" [(ngModel)]="contrasenaUsuario" maxlength="30" />
+
+    <button class="guardar" (click)="guardarCambiosUsuario()">Guardar cambios</button>
   </div>
 </div>

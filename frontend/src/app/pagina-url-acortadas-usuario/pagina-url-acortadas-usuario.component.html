@@ -5,14 +5,7 @@
 
     <div class="input-usos">
       <label><strong>Usos restantes:</strong></label>
-      <input class="imaginput"
-        type="number"
-        [(ngModel)]="url.nuevosUsos"
-        min="1"
-        max="99"
-        (keydown)="validarInput($event, url)"
-        (paste)="evitarPegar($event)"
-        />
+      <input class="imaginput" type="number" [(ngModel)]="url.nuevosUsos"min="1"max="99"(keydown)="validarInput($event, url)"(paste)="evitarPegar($event)"/>
 
     </div>
 

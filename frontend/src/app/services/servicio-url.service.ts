@@ -27,6 +27,13 @@ export class ServicioURLService {
     });
   }
 
+  getContrasena(): Observable<string> {
+    return this.http.get('http://localhost:8080/api/URL/con', {
+      responseType: 'text',
+      withCredentials: true
+    });
+  }
+
   verificarUrl(url: string): Observable<string> {
     const urlCodificada = encodeURIComponent(url);
     return this.http.get(`http://localhost:8080/api/URL/verificar?url=${urlCodificada}`, {
@@ -77,6 +84,19 @@ export class ServicioURLService {
 
   haAcortadoAlMenosUna(): boolean {
     return this.haAcortado;
+  }
+
+  getDatosUsuario(): Observable<{ nombre: string, correo: string, contrasena: string }> {
+    return this.http.get<{ nombre: string, correo: string, contrasena: string }>(
+      'http://localhost:8080/api/URL/usuario/datos',
+      { withCredentials: true }
+    );
+  }
+
+  actualizarDatosUsuario(datos: { nombre: string, contrasena: string }) {
+    return this.http.put('http://localhost:8080/api/usuario/actualizar', datos, {
+      withCredentials: true 
+    });
   }
 
 }
