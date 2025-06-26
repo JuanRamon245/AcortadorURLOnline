@@ -166,7 +166,7 @@ public class URLController {
 
                 response.sendRedirect(originalUrl);
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "URL no encontrada");
+                response.sendRedirect("http://localhost:4200/pagina-redireccion-incorrecta?origen=backend");
             }
         } catch (Exception e) {
             if (e.getMessage().contains("usos disponibles")) {

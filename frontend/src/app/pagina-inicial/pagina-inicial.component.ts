@@ -41,6 +41,7 @@ export class PaginaInicialComponent {
                   const id = urlCorta.split('/').pop();
                   const urlFinal = `http://localhost:8080/api/URL/r/${id}`;
                   console.log('URL acortada:', urlFinal);
+                  this.URLServicio.marcarComoAcortado();
 
                   this.router.navigate(['/pagina-urlcorta-generada'], {
                     state: { url: urlFinal }

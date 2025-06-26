@@ -69,5 +69,14 @@ export class ServicioURLService {
     return this.http.delete(`http://localhost:8080/api/URL/eliminar/${shortId}`, { responseType: 'text' });
   }
 
+  private haAcortado: boolean = false;
+
+  marcarComoAcortado() {
+    this.haAcortado = true;
+  }
+
+  haAcortadoAlMenosUna(): boolean {
+    return this.haAcortado;
+  }
 
 }
