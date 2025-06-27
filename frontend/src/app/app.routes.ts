@@ -8,6 +8,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { noAuthGuard } from './guards/no-auth.guard';
 import { PaginaRedireccionIncorrectaComponent } from './pagina-redireccion-incorrecta/pagina-redireccion-incorrecta.component';
 import { RedireccionInvalidaGuard } from './guards/redireccion-invalida.guard';
+import { VerificacionComponent } from './verificacion/verificacion.component';
+import { TokenVerificacionGuard } from './guards/token-verificacion.guard';
 
 export const routes: Routes = [
   { path: '', component: PaginaInicialComponent },
@@ -15,6 +17,7 @@ export const routes: Routes = [
   { path: 'pagina-login', component: PaginaLoginComponent, canActivate: [noAuthGuard] },
   { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'pagina-redireccion-incorrecta', component: PaginaRedireccionIncorrectaComponent, canActivate: [RedireccionInvalidaGuard] },
+  { path: 'verificar', component: VerificacionComponent , canActivate: [TokenVerificacionGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 ];

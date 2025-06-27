@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   mostrarDatos = false;
   mostrarDropdown = false;
   esHome = true;
+  esRutaVerificacion = false;
   estaEnLoginORegistro = false;
 
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
@@ -53,6 +54,13 @@ export class AppComponent implements OnInit {
         const url = event.urlAfterRedirects;
         this.esHome = url === '/';
         this.estaEnLoginORegistro = url === '/pagina-login' || url === '/pagina-registro' || url === '/pagina-urlcorta-generada' || url === '/pagina-url-acortadas-usuario' || url === '/pagina-redireccion-incorrecta';
+
+      });
+
+      this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((evento: any) => {
+        this.esRutaVerificacion = evento.url.includes('/verificar');
       });
   }
 

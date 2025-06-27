@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import com.acortadorURL.backend.clases.UrlRequest;
+import com.acortadorURL.backend.servicio.EmailService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -187,6 +189,9 @@ public class URLController {
         }
     }
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/registrarUsuario")
     public DeferredResult<ResponseEntity<String>> registrarUsuario(@RequestBody Map<String, String> datos,
             HttpSession session) {
@@ -204,18 +209,59 @@ public class URLController {
                 public void onDataChange(DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         resultado.setResult(ResponseEntity.status(HttpStatus.CONFLICT)
-                                .body("Ya existe un usuario con ese correo"));
+                                .body("Ya existe un usuario con ese correo."));
                     } else {
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("nombre", nombre);
-                        data.put("correo", correo);
-                        data.put("contrasena", contrasena);
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("pendientes")
+                                .child(correoNormalizado);
+                        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    resultado.setResult(ResponseEntity.status(HttpStatus.CONFLICT)
+                                            .body("Ya se esta verificando un uusario con este correo."));
+                                } else {
+                                    String token = UUID.randomUUID().toString();
 
-                        ref.setValueAsync(data);
-                        session.setAttribute("usuarioNombreLogueado", nombre);
-                        session.setAttribute("usuarioCorreoLogueado", correo);
-                        session.setAttribute("usuarioContrasenaLogueado", contrasena);
-                        resultado.setResult(ResponseEntity.ok("Usuario registrado correctamente"));
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("nombre", nombre);
+                                    data.put("correo", correo);
+                                    data.put("contrasena", contrasena);
+                                    data.put("token", token);
+
+                                    ref2.setValueAsync(data);
+                                    emailService.enviarCorreoVerificacion(correo, token);
+
+                                    resultado.setResult(
+                                            ResponseEntity.ok("Verifica tu correo antes de completar el registro."));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Error en Firebase: " + error.getMessage()));
+                            }
+                        });
+                        /*
+                         * String token = UUID.randomUUID().toString();
+                         * 
+                         * Map<String, Object> data = new HashMap<>();
+                         * data.put("nombre", nombre);
+                         * data.put("correo", correo);
+                         * data.put("contrasena", contrasena);
+                         * 
+                         * data.put("verificado", false);
+                         * data.put("token", token);
+                         * 
+                         * ref.setValueAsync(data);
+                         * 
+                         * emailService.enviarCorreoVerificacion(correo, token);
+                         * 
+                         * session.setAttribute("usuarioNombreLogueado", nombre);
+                         * session.setAttribute("usuarioCorreoLogueado", correo);
+                         * session.setAttribute("usuarioContrasenaLogueado", contrasena);
+                         * resultado.setResult(ResponseEntity.ok("Usuario registrado correctamente"));
+                         */
                     }
                 }
 
@@ -230,6 +276,54 @@ public class URLController {
             resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al registrar usuario: " + e.getMessage()));
         }
+
+        return resultado;
+    }
+
+    @GetMapping("/verificarUsuario")
+    public DeferredResult<ResponseEntity<String>> verificarUsuario(@RequestParam String token) {
+        DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
+
+        DatabaseReference pendientesRef = FirebaseDatabase.getInstance().getReference("pendientes");
+
+        pendientesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot userSnap : snapshot.getChildren()) {
+                    String tokenGuardado = userSnap.child("token").getValue(String.class);
+                    if (token.equals(tokenGuardado)) {
+                        String correo = userSnap.child("correo").getValue(String.class);
+                        String nombre = userSnap.child("nombre").getValue(String.class);
+                        String contrasena = userSnap.child("contrasena").getValue(String.class);
+
+                        String correoNormalizado = correo.replace(".", "_");
+
+                        DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference("usuarios")
+                                .child(correoNormalizado);
+                        Map<String, Object> usuario = new HashMap<>();
+                        usuario.put("nombre", nombre);
+                        usuario.put("correo", correo);
+                        usuario.put("contrasena", contrasena);
+                        usuario.put("verificado", true);
+
+                        usuariosRef.setValueAsync(usuario);
+
+                        userSnap.getRef().removeValueAsync();
+
+                        resultado.setResult(ResponseEntity.ok("Cuenta verificada correctamente"));
+                        return;
+                    }
+                }
+
+                resultado.setResult(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token inválido o ya usado"));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error en Firebase: " + error.getMessage()));
+            }
+        });
 
         return resultado;
     }

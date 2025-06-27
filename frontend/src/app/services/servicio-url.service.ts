@@ -104,5 +104,11 @@ export class ServicioURLService {
     );
   }
 
+  verificarUsuario(token: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/api/URL/verificarUsuario?token=${token}`, {
+      responseType: 'text'
+    });
+  }
+
 
 }

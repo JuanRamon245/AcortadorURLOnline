@@ -1,4 +1,4 @@
-<div class="contenedor">
+<div class="contenedor"  *ngIf="!esRutaVerificacion">
   <div class="filaSuperior">
     <div class="mensajeEnlace"
         [style.visibility]="(respuesta !== 'Registrarse' || estaEnLoginORegistro) ? 'visible' : 'hidden'"
@@ -17,6 +17,10 @@
   <div class="paginaInferior">
     <router-outlet></router-outlet>
   </div>
+</div>
+
+<div *ngIf="esRutaVerificacion">
+  <router-outlet></router-outlet>
 </div>
 
 <div *ngIf="mostrarModal" class="modal-overlay">
