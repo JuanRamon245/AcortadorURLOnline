@@ -155,9 +155,10 @@ export class AppComponent implements OnInit {
   }
 
   guardarCambiosUsuario() {
-    console.log('Intentando actualizar con:', this.nombreUsuario, this.contrasenaUsuario);
+    console.log('Intentando actualizar con:', this.nombreUsuario, this.correoUsuario, this.contrasenaUsuario);
     const nuevosDatos = {
       nombre: this.nombreUsuario,
+      correo: this.correoUsuario,
       contrasena: this.contrasenaUsuario
     };
 
@@ -165,6 +166,7 @@ export class AppComponent implements OnInit {
       next: () => {
         alert('Datos actualizados correctamente');
         this.mostrarDatos = false;
+        location.reload();
       },
       error: (err) => {
         console.error('Error al actualizar datos:', err);
@@ -172,5 +174,4 @@ export class AppComponent implements OnInit {
       }
     });
   }
-
 }

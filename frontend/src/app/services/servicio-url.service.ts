@@ -93,10 +93,16 @@ export class ServicioURLService {
     );
   }
 
-  actualizarDatosUsuario(datos: { nombre: string, contrasena: string }) {
-    return this.http.put('http://localhost:8080/api/usuario/actualizar', datos, {
-      withCredentials: true 
-    });
+  actualizarDatosUsuario(datos: { nombre: string, correo: string, contrasena: string }): Observable<string> {
+    return this.http.put(
+      'http://localhost:8080/api/URL/usuario/actualizar',
+      datos,
+      {
+        withCredentials: true,
+        responseType: 'text'
+      }
+    );
   }
+
 
 }

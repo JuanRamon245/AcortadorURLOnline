@@ -20,7 +20,7 @@
 </div>
 
 <div *ngIf="mostrarModal" class="modal-overlay">
-  <div class="modal" #modalCerrarSesion>
+  <div class="modal paddin1" #modalCerrarSesion>
     <button class="cerrar" (click)="cerrarModal()">×</button>
     <h2>¿Deseas cerrar sesión?</h2>
     <button class="cerrarSes" (click)="cerrarSesion()">Cerrar sesión</button>
@@ -28,18 +28,26 @@
 </div>
 
 <div *ngIf="mostrarDatos" class="modal-overlay">
-  <div class="modal" #modalDatos>
+  <div class="modal paddin2" #modalDatos>
     <button class="cerrar" (click)="cerrarModalDatos()">×</button>
     <h2>Datos del usuario</h2>
 
-    <label><strong>Nombre:</strong></label>
-    <input type="text" [(ngModel)]="nombreUsuario" maxlength="20" />
+    <div class="form-group">
+      <label><strong>Nombre:</strong></label>
+      <input class="imaginput" type="text" [(ngModel)]="nombreUsuario" maxlength="20" />
+    </div>
 
-    <p><strong>Correo:</strong> {{ correoUsuario }}</p>
+    <div class="form-group">
+      <label><strong>Correo:</strong></label>
+      <p class="correoTexto">{{ correoUsuario }}</p>
+    </div>
 
-    <label><strong>Contraseña:</strong></label>
-    <input type="text" [(ngModel)]="contrasenaUsuario" maxlength="30" />
-
+    <div class="form-group">
+      <label><strong>Contraseña:</strong></label>
+      <input class="imaginput" type="text" [(ngModel)]="contrasenaUsuario" maxlength="30" />
+    </div>
+    
     <button class="guardar" (click)="guardarCambiosUsuario()">Guardar cambios</button>
   </div>
 </div>
+
