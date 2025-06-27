@@ -14,6 +14,7 @@ export class PaginaLoginComponent {
   modo: 'login' | 'registro' = 'login';
 
   mensaje: string = '';
+  notificacion: string = '';
 
   constructor(private URLServicio: ServicioURLService, private router: Router) {}
 
@@ -99,8 +100,13 @@ export class PaginaLoginComponent {
         } else {
           this.URLServicio.registrarse(this.nombre, this.correo, this.contrasena).subscribe({
             next: (respuesta: any) => {
-              if (respuesta.includes('Usuario registrado correctamente')) {
-                window.location.href = '/';
+              if (respuesta.includes('Verifica tu correo antes de completar el registro.')) {
+                this.notificacion = 'Verifica tu correo antes de completar el registro.';
+                this.mensaje = '';
+
+                setTimeout(() => {
+                  this.notificacion = '';
+                }, 3000);
               }
             },
             error: err => {

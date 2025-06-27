@@ -218,7 +218,7 @@ public class URLController {
                             public void onDataChange(DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     resultado.setResult(ResponseEntity.status(HttpStatus.CONFLICT)
-                                            .body("Ya se esta verificando un uusario con este correo."));
+                                            .body("Ya se esta verificando un usario con este correo."));
                                 } else {
                                     String token = UUID.randomUUID().toString();
 
@@ -242,26 +242,7 @@ public class URLController {
                                         .body("Error en Firebase: " + error.getMessage()));
                             }
                         });
-                        /*
-                         * String token = UUID.randomUUID().toString();
-                         * 
-                         * Map<String, Object> data = new HashMap<>();
-                         * data.put("nombre", nombre);
-                         * data.put("correo", correo);
-                         * data.put("contrasena", contrasena);
-                         * 
-                         * data.put("verificado", false);
-                         * data.put("token", token);
-                         * 
-                         * ref.setValueAsync(data);
-                         * 
-                         * emailService.enviarCorreoVerificacion(correo, token);
-                         * 
-                         * session.setAttribute("usuarioNombreLogueado", nombre);
-                         * session.setAttribute("usuarioCorreoLogueado", correo);
-                         * session.setAttribute("usuarioContrasenaLogueado", contrasena);
-                         * resultado.setResult(ResponseEntity.ok("Usuario registrado correctamente"));
-                         */
+
                     }
                 }
 
