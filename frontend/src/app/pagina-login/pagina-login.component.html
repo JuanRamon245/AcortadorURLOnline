@@ -14,8 +14,9 @@
           {{ mostrarContrasenaLogin ? 'visibility' : 'visibility_off' }}
         </button>
       </div>
-      <p>{{ mensaje }}</p>
+      <p class="error">{{ mensaje }}</p>
       <button type="submit" class="botonAcceso">Loguearse</button>
+      <p class="enlace" (click)="panelRecuperarContrasena()">¿Te has olvidado de la contraseña?</p>
     </form>
 
     <form *ngIf="modo === 'registro'" (ngSubmit)="registrarse()">
@@ -35,13 +36,28 @@
           {{ mostrarRepetir ? 'visibility' : 'visibility_off' }}
         </button>
       </div>
-      <p>{{ mensaje }}</p>
+      <p class="error">{{ mensaje }}</p>
       <button type="submit" class="botonAcceso">Crear cuenta</button>
     </form>
   </div>
 </div>
 
 <div *ngIf="notificacion" class="notificacion">
-  Verifica tu gmail para poder acceder a tu cuenta.
+  {{notificacion}}
   <span class="material-symbols-outlined icono-refresh">drafts</span>
+</div>
+
+<div *ngIf="mostrarRecuperarContrasena" class="modal-overlay">
+  <div class="modal" #modalContrasena>
+    <button class="cerrar" (click)="cerrarRecuperarContrasena()">×</button>
+    <h2>Recuperar la contraseña</h2>
+
+    <p>Escribe tu correo para enviar un enlace y cambiar la contraseña:</p>
+
+    <div class="form-group">
+      <input class="imaginput" type="email" [(ngModel)]="correoUsuario" maxlength="40" />
+    </div>
+
+    <button class="enviarCor" (click)="enviarCorreoRecuperacionContrasena()">Enviar correo</button>
+  </div>
 </div>

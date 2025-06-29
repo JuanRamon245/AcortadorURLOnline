@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
 
   constructor (private servicioURL : ServicioURLService, private router: Router) { }
   ngOnInit(): void {
-    // Detectar si hay sesión
     this.servicioURL.getUsuario().subscribe({
       next: (res) => this.respuesta = res,
       error: () => this.respuesta = 'Registrarse'
@@ -47,7 +46,6 @@ export class AppComponent implements OnInit {
       error: () => this.respuesta2 = 'Registrarse'
     });
 
-    // Detectar si estamos en el home
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -60,7 +58,7 @@ export class AppComponent implements OnInit {
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((evento: any) => {
-        this.esRutaVerificacion = evento.url.includes('/verificar');
+        this.esRutaVerificacion = evento.url.includes('/verificar') || evento.url.includes('/restablecer-contrasena');
       });
   }
 
@@ -74,7 +72,7 @@ export class AppComponent implements OnInit {
 
   cambiarDatos() {
     this.mostrarDropdown = false;
-    this.router.navigate(['/pagina-cambiar-datos']); // Asegúrate de tener esta ruta/component
+    this.router.navigate(['/pagina-cambiar-datos']);
   }
 
   redirigirALogin() {
@@ -125,8 +123,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-
   volverHome() {
     this.router.navigate(['/']);
   }
@@ -141,7 +137,6 @@ export class AppComponent implements OnInit {
 
   abrirModalDatos() {
     this.mostrarDropdown = false;
-    console.log("Hola");
 
     this.servicioURL.getDatosUsuario().subscribe({
       next: (res) => {

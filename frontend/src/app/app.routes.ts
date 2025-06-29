@@ -10,6 +10,7 @@ import { PaginaRedireccionIncorrectaComponent } from './pagina-redireccion-incor
 import { RedireccionInvalidaGuard } from './guards/redireccion-invalida.guard';
 import { VerificacionComponent } from './verificacion/verificacion.component';
 import { TokenVerificacionGuard } from './guards/token-verificacion.guard';
+import { RestablecerContrasenaComponent } from './restablecer-contrasena/restablecer-contrasena.component';
 
 export const routes: Routes = [
   { path: '', component: PaginaInicialComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'pagina-redireccion-incorrecta', component: PaginaRedireccionIncorrectaComponent, canActivate: [RedireccionInvalidaGuard] },
   { path: 'verificar', component: VerificacionComponent , canActivate: [TokenVerificacionGuard] },
+  { path: 'restablecer-contrasena', component: RestablecerContrasenaComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 ];

@@ -110,5 +110,19 @@ export class ServicioURLService {
     });
   }
 
+  enviarCorreoRecuperar(correo: string): Observable<any> {
+    return this.http.post('http://localhost:8080/api/URL/enviarCorreoRecuperacion', { correo }, { responseType: 'text' });
+  }
+
+  restablecerContrasena(datos: { token: string, contrasena: string }): Observable<string> {
+    return this.http.put(
+      'http://localhost:8080/api/URL/usuario/restablecerContrasena',
+      datos,
+      {
+        withCredentials: true,
+        responseType: 'text'
+      }
+    );
+  }
 
 }

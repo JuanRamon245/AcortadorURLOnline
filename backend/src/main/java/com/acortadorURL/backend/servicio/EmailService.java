@@ -23,4 +23,17 @@ public class EmailService {
 
         mailSender.send(mensaje);
     }
+
+    public void enviarCorreoRecuperacion(String destinatario, String token) {
+        String asunto = "Recuperación de contraseña";
+        String enlace = "http://localhost:4200/restablecer-contrasena?token=" + token;
+        String cuerpo = "Haz clic en el siguiente enlace para restablecer tu contraseña: " + enlace;
+
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(destinatario);
+        mensaje.setSubject(asunto);
+        mensaje.setText(cuerpo);
+
+        mailSender.send(mensaje);
+    }
 }

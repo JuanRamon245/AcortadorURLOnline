@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServicioURLService } from '../services/servicio-url.service';
 import { Router } from '@angular/router';
@@ -15,14 +15,18 @@ export class PaginaLoginComponent {
 
   mensaje: string = '';
   notificacion: string = '';
+  nombreUsuario: string = '';
+  correoUsuario: string = '';
+
+  @ViewChild('modalContrasena') modalContrasenaRef!: ElementRef;
 
   constructor(private URLServicio: ServicioURLService, private router: Router) {}
 
   mostrarContrasenaLogin = false;
   mostrarContrasenaRegistro = false;
   mostrarRepetir = false;
+  mostrarRecuperarContrasena = false;
   
-
   correo = '';
   contrasena = '';
   nombre = '';
@@ -101,7 +105,7 @@ export class PaginaLoginComponent {
           this.URLServicio.registrarse(this.nombre, this.correo, this.contrasena).subscribe({
             next: (respuesta: any) => {
               if (respuesta.includes('Verifica tu correo antes de completar el registro.')) {
-                this.notificacion = 'Verifica tu correo antes de completar el registro.';
+                this.notificacion = 'Verifica este correo para poder acceder con él.';
                 this.mensaje = '';
 
                 setTimeout(() => {
@@ -121,5 +125,37 @@ export class PaginaLoginComponent {
       }
     }
     }
+  }
+
+  panelRecuperarContrasena() {
+    this.mostrarRecuperarContrasena = true;
+  }
+
+  cerrarRecuperarContrasena() {
+    this.mostrarRecuperarContrasena = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.mostrarRecuperarContrasena && this.modalContrasenaRef) {
+      const clickedInside = this.modalContrasenaRef.nativeElement.contains(event.target);
+      if (!clickedInside) {
+        this.cerrarRecuperarContrasena();
+      }
+    }
+  }
+
+  enviarCorreoRecuperacionContrasena() {
+    this.URLServicio.enviarCorreoRecuperar(this.correoUsuario).subscribe({
+      next: () => {
+        this.notificacion = 'Correo de recuperacion enviado correctamente. Revisa tu bandeja de entrada.';
+        this.mostrarRecuperarContrasena = false;
+        this.correoUsuario = '';
+      },
+      error: (err) => {
+        this.notificacion = 'Error :'+err;
+        console.error('Error al enviar correo:', err);
+      }
+    });
   }
 }

@@ -80,6 +80,12 @@
   border-radius: 6px;
 }
 
+.tipoAcceso form p {
+  text-align: center;
+  width: 100%;
+}
+
+
 .switchLog.activo {
   background-color: rgb(227, 235, 235);
   color: #000000;
@@ -118,10 +124,19 @@
 
 p {
   height: 1.5rem;
-  color: red;
+  
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin: 0;
   font-size: 1.3rem;
+}
+
+.error {
+  color: red;
+}
+
+.enlace {
+  color:#555;
+  cursor: pointer;
 }
 
 .notificacion {
@@ -168,4 +183,79 @@ p {
     transform: scale(1);
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9990;
+}
+
+.modal {
+  background: white;
+  padding: 60px 100px;
+  border-radius: 8px;
+  position: relative;
+  text-align: center;
+}
+
+.modal h2 {
+  margin-bottom: 40px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.modal p {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.modal label {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.modal button {
+  padding: 10px 20px;
+  margin-top: 70px;
+  
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+}
+
+.cerrar {
+  position: absolute;
+  top: -70px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: black;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.enviarCor {
+  height: 3.5rem;
+  background-color: rgb(81, 134, 200);
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+.imaginput {
+  margin-top: 30px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 600px;
+    text-align: center;
+    font-size: 20px;
+  }
 

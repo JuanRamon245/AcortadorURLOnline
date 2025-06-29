@@ -509,49 +509,112 @@ public class URLController {
         });
     }
 
-    /*
-     * @PutMapping("/usuario/actualizar")
-     * public ResponseEntity<String> actualizarDatosUsuario(@RequestBody Map<String,
-     * String> nuevosDatos,
-     * HttpSession session) {
-     * String correo = (String) session.getAttribute("usuarioCorreoLogueado");
-     * System.out.println(correo);
-     * if (correo == null) {
-     * return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autorizado");
-     * }
-     * 
-     * String nuevoNombre = nuevosDatos.get("nombre");
-     * System.out.println(nuevoNombre);
-     * String nuevaContrasena = nuevosDatos.get("contrasena");
-     * System.out.println(nuevaContrasena);
-     * 
-     * if (nuevoNombre == null || nuevaContrasena == null ||
-     * nuevoNombre.length() > 20 || nuevaContrasena.length() > 30) {
-     * return ResponseEntity.badRequest().body("Datos inválidos");
-     * }
-     * System.out.println("1");
-     * 
-     * String correoCodificado = correo.replace(".", "_");
-     * 
-     * DatabaseReference ref = FirebaseDatabase.getInstance()
-     * .getReference("usuarios")
-     * .child(correoCodificado);
-     * 
-     * System.out.println(correoCodificado);
-     * 
-     * Map<String, Object> updates = new HashMap<>();
-     * updates.put("nombre", nuevoNombre);
-     * updates.put("contrasena", nuevaContrasena);
-     * 
-     * ref.updateChildrenAsync(updates);
-     * 
-     * System.out.println("1");
-     * 
-     * session.setAttribute("usuarioNombreLogueado", nuevoNombre);
-     * session.setAttribute("usuarioContrasenaLogueado", nuevaContrasena);
-     * 
-     * return ResponseEntity.ok("Datos actualizados correctamente");
-     * }
-     */
+    @PostMapping("/enviarCorreoRecuperacion")
+    public DeferredResult<ResponseEntity<String>> enviarCorreoRecuperacion(@RequestBody Map<String, String> datos) {
+        DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
+        String correo = datos.get("correo");
 
+        if (correo == null || correo.isBlank()) {
+            resultado.setResult(ResponseEntity.badRequest().body("Correo no proporcionado"));
+            return resultado;
+        }
+
+        String correoNormalizado = correo.replace(".", "_");
+        DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference("usuarios")
+                .child(correoNormalizado);
+
+        usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String token = UUID.randomUUID().toString();
+
+                    Map<String, Object> datosRecuperacion = new HashMap<>();
+                    datosRecuperacion.put("correo", correo);
+                    datosRecuperacion.put("token", token);
+
+                    DatabaseReference recuperacionRef = FirebaseDatabase.getInstance().getReference("recuperaciones")
+                            .child(correoNormalizado);
+                    recuperacionRef.setValueAsync(datosRecuperacion);
+
+                    emailService.enviarCorreoRecuperacion(correo, token);
+                    resultado.setResult(ResponseEntity.ok("Correo de recuperación enviado"));
+                } else {
+                    resultado.setResult(ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ese correo"));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                resultado.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error Firebase: " + error.getMessage()));
+            }
+        });
+
+        return resultado;
+    }
+
+    @PutMapping("/usuario/restablecerContrasena")
+    public void restablecerContrasena(
+            @RequestBody Map<String, String> datos,
+            HttpServletResponse response) throws IOException {
+
+        String token = datos.get("token");
+        String nuevaContrasena = datos.get("contrasena");
+
+        if (token == null || nuevaContrasena == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Token o contraseña faltantes");
+            return;
+        }
+
+        DatabaseReference recuperacionesRef = FirebaseDatabase.getInstance().getReference("recuperaciones");
+
+        recuperacionesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot userSnap : snapshot.getChildren()) {
+                    String tokenGuardado = userSnap.child("token").getValue(String.class);
+                    if (token.equals(tokenGuardado)) {
+                        String correo = userSnap.child("correo").getValue(String.class);
+                        String correoCodificado = correo.replace(".", "_");
+
+                        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference("usuarios")
+                                .child(correoCodificado);
+                        Map<String, Object> actualizacion = new HashMap<>();
+                        actualizacion.put("contrasena", nuevaContrasena);
+                        usuarioRef.updateChildrenAsync(actualizacion);
+
+                        // Eliminar la solicitud de recuperación
+                        userSnap.getRef().removeValueAsync();
+
+                        try {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("Contraseña actualizada correctamente");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return;
+                    }
+                }
+
+                try {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("Token no válido o expirado");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                try {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    response.getWriter().write("Error al acceder a Firebase");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
 }
