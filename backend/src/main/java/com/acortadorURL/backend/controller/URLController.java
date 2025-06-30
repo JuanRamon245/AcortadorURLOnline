@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -112,7 +113,41 @@ public class URLController {
             String correo = request.getCorreo();
             int usos = 20;
 
+            DatabaseReference urlsRef = FirebaseDatabase.getInstance().getReference("urls");
+
+            CountDownLatch latch = new CountDownLatch(1);
+            final String[] resultadoUrl = { null };
+
+            urlsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        String dbUrl = child.child("originalUrl").getValue(String.class);
+                        String dbCorreo = child.child("correoUsuario").getValue(String.class);
+
+                        if (originalUrl.equals(dbUrl) && correo.equals(dbCorreo)) {
+                            resultadoUrl[0] = child.getKey();
+                            break;
+                        }
+                    }
+                    latch.countDown();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    latch.countDown();
+                }
+            });
+
+            latch.await();
+
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("urls").child(shortId);
+
+            if (resultadoUrl[0] != null) {
+                System.out.println("URL ya existente con ID: " + resultadoUrl[0]);
+                String existingShortUrl = "http://localhost:8080/" + resultadoUrl[0];
+                return ResponseEntity.ok(existingShortUrl);
+            }
 
             Map<String, Object> data = new HashMap<>();
             data.put("originalUrl", originalUrl);

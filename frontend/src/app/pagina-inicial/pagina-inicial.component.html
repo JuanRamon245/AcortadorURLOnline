@@ -9,3 +9,9 @@
     <button (click)="acortarUrl()">Acortar</button>
   </div>
 </div>
+
+<div *ngIf="notificacion" class="notificacion"
+     [ngClass]="{ 'error': notificacion.startsWith('Error'), 'exito': !notificacion.startsWith('Error') }">
+  {{notificacion}}
+  <span class="material-symbols-outlined icono-refresh">language</span>
+</div>

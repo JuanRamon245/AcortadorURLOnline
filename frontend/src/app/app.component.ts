@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   nombreUsuario: string = '';
   correoUsuario: string = '';
   contrasenaUsuario: string = '';
+  notificacion: string = '';
 
   mostrarModal = false;
   mostrarDatos = false;
@@ -146,7 +147,7 @@ export class AppComponent implements OnInit {
         this.mostrarDatos = true;
       },
       error: (err) => {
-        console.error('Error obteniendo datos del usuario', err);
+        this.notificacion ='Error obteniendo datos del usuario';
       }
     });
 
@@ -167,13 +168,13 @@ export class AppComponent implements OnInit {
 
     this.servicioURL.actualizarDatosUsuario(nuevosDatos).subscribe({
       next: () => {
-        alert('Datos actualizados correctamente');
+        this.notificacion = 'Datos actualizados correctamente';
         this.mostrarDatos = false;
         location.reload();
       },
       error: (err) => {
         console.error('Error al actualizar datos:', err);
-        alert('Ocurrió un error al actualizar los datos');
+        this.notificacion = 'Ocurrió un error al actualizar los datos';
       }
     });
   }
