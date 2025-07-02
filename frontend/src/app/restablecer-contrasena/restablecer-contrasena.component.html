@@ -2,15 +2,18 @@
     <h2 class="titulo">Acortador URLs</h2>
     <div class="tipoTexto">
         <form *ngIf="modo === 'sinRestablecer'">
-            <p>Restablecer la contraseña para el correo "":</p>
-            <input class="imaginput" type="text" name="nuevaContrasena" [(ngModel)]="nuevaContrasenaUsuario" maxlength="30" />
-            <button type="submit" class="botonAcceso" (click)="restablecerContrasena()">Restablecer</button>
+            <p>Introducca la nueva contraseña que desea utilizar:</p>
+            <div class="formulario-recuperacion">
+                
+                <input class="imaginput" type="text" name="nuevaContrasena" [(ngModel)]="nuevaContrasenaUsuario" maxlength="30" />
+                <button type="submit" class="botonAcceso" (click)="restablecerContrasena()">Restablecer</button>
+            </div>
         </form>
         <form *ngIf="modo === 'restablecer'">
             <p>Ya puede cerrar esta ventana, su contraseña ha sido restablecida.</p>
         </form>
         <form *ngIf="modo === 'error'">
-            <p>El correo enviado para restablecer la contraseña no coincide con el de la nbase d edatos, por favor intentelo más tarde o de nuevo.</p>
+            <p>El correo enviado para restablecer la contraseña no coincide con el de la base de datos,</p><p> por favor intentelo más tarde o de nuevo.</p>
         </form>
     </div>
 </div>

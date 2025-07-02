@@ -1,18 +1,42 @@
-.mensaje {
-  text-align: center;
-  margin: 5rem auto;
-  margin-top: 2rem;
-  font-size: 3rem;
-  height: auto;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+
+* {
+  box-sizing: border-box;
 }
 
+.contenedorRestablecerContrasena {
+  margin: 0;
+  padding: 1.5rem 1.5rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+
 .titulo {
-    color: #ffffff;
-    background-color: #2196f3;
-    margin-left: 60px;
-    margin-right: 60px;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 20px;
+  text-align: center;
+  padding: 10px 20px;
+  margin-bottom: 100px;
+  color: #ffffff;
+  background-color: #4d8cf3;
+  border: none;
+  border-radius: 12px;
+  font-size: 3rem;
+  font-family: 'Ubuntu', sans-serif;
+  border: 0.1rem solid rgb(40, 73, 112);
+  box-shadow: -0.6rem 0.6rem 0 rgb(54, 74, 99);
+  cursor: pointer;
+}
+
+.mensaje {
+  font-size: 2rem;
+  color: rgb(83, 62, 62);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  margin-left: 1.5rem;
+  font-family: 'Ubuntu', sans-serif;
 }

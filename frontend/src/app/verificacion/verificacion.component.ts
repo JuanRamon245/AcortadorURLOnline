@@ -7,12 +7,7 @@ import { ServicioURLService } from '../services/servicio-url.service';
 @Component({
   selector: 'app-verificacion',
   imports: [NgIf],
-  template: `
-  <div>
-    <div class="mensaje titulo"><h2>Acortador URLs</h2></div>
-    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
-  </div>
-  `,
+  templateUrl: 'verificacion.component.html',
   styleUrl: './verificacion.component.scss'
 })
 export class VerificacionComponent implements OnInit {

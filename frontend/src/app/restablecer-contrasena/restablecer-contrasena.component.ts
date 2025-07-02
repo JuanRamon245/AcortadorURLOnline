@@ -12,6 +12,7 @@ import { ServicioURLService } from '../services/servicio-url.service';
   styleUrl: './restablecer-contrasena.component.scss'
 })
 
+
 export class RestablecerContrasenaComponent {
   modo: 'sinRestablecer' | 'restablecer' | 'error' = 'sinRestablecer';
   nuevaContrasenaUsuario = '';

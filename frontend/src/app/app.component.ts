@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((evento: any) => {
-        this.esRutaVerificacion = evento.url.includes('/verificar') || evento.url.includes('/restablecer-contrasena');
+        this.esRutaVerificacion = evento.url.includes('/verificar') || evento.url.includes('/restablecer-contrasena') || evento.url.includes('/pagina-redireccion-incorrecta');
       });
   }
 
