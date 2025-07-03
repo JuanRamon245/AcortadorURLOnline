@@ -16,6 +16,10 @@
   color: rgb(83, 62, 62);
 }
 
+.card-url p {
+  word-break: break-all;
+  white-space: normal;
+}
 .botones {
   margin-top: 0.5rem;
   display: flex;

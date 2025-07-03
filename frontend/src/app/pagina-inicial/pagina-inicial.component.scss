@@ -15,14 +15,14 @@
 }
 
 
-  h2 {
-    font-size: 3.5rem;
-    color: rgb(83, 62, 62);
-    font-family: 'Ubuntu', sans-serif;
-    margin-bottom: 2rem;
-  }
+h2 {
+  font-size: 3.5rem;
+  color: rgb(83, 62, 62);
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 2rem;
+}
 
-  .formulario-acortador {
+.formulario-acortador {
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -32,22 +32,22 @@
   margin-bottom: 3rem;
 }
 
-  .input-label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 80%;
-    padding-left: 10px;
-  }
+.input-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 80%;
+  padding-left: 10px;
+}
 
-  label {
-    font-size: 2.5rem;
-    color: rgb(83, 62, 62);
-    font-weight: bold;
-    margin-bottom: 1rem;
-    margin-left: 1.5rem;
-    font-family: 'Ubuntu', sans-serif;
-  }
+label {
+  font-size: 2.5rem;
+  color: rgb(83, 62, 62);
+  font-weight: bold;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  font-family: 'Ubuntu', sans-serif;
+}
 
 input {
   width: 100%;
@@ -76,10 +76,10 @@ button {
   box-sizing: border-box;
 }
 
-  button:hover {
-    background-color: rgb(54, 74, 99);
-    box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
-  }
+button:hover {
+  background-color: rgb(54, 74, 99);
+  box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
+}
 
 .notificacion {
   margin-top: 50px;
@@ -128,5 +128,5 @@ button {
 }
 
 .notificacion.error {
-  color: rgb(199, 80, 80); /* rojo claro */
+  color: rgb(199, 80, 80);
 }

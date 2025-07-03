@@ -19,8 +19,8 @@ html, body {
   height: 10vh;
   box-sizing: border-box;
   background-image:
-    repeating-linear-gradient(60deg, rgb(54, 74, 99) 4px, rgb(54, 74, 99) 12px, transparent 2px, transparent 30px),
-    repeating-linear-gradient(-60deg, rgb(54, 74, 99) 4px, rgb(54, 74, 99) 12px, transparent 2px, transparent 30px);
+    repeating-linear-gradient(50deg, rgb(74, 123, 184) 4px, rgb(74, 123, 184) 12px, transparent 2px, transparent 30px),
+    repeating-linear-gradient(-50deg, rgb(74, 123, 184) 4px, rgb(74, 123, 184) 12px, transparent 2px, transparent 30px);
 }
 
 .mensajeEnlace {
@@ -174,14 +174,14 @@ html, body {
 
 
 .imaginput {
-    margin-left: 50px;
-    padding: 6px 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    width: 300px;
-    text-align: center;
-    font-size: 20px;
-  }
+  margin-left: 50px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 300px;
+  text-align: center;
+  font-size: 20px;
+}
 
 button {
   background-color: #4d8cf3;

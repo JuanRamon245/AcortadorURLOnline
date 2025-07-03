@@ -69,14 +69,14 @@ button {
 }
 
 .formulario-recuperacion {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 1rem;
-    margin-top: 40px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 40px;
+}
 
-  button:hover {
-    background-color: rgb(54, 74, 99);
-    box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
-  }
+button:hover {
+  background-color: rgb(54, 74, 99);
+  box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
+}
