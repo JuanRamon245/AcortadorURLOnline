@@ -7,10 +7,12 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './pagina-redireccion-incorrecta.component.html',
   styleUrl: './pagina-redireccion-incorrecta.component.scss'
 })
+
 export class PaginaRedireccionIncorrectaComponent {
 
   constructor(private router: Router) {}
 
+  // Método para redirigir al usuario al inicio cuando suceda este evento
   volverInicio() {
     this.router.navigate(['/']);
   }

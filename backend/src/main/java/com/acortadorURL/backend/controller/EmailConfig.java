@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+//Clase de configuracion del gmail para enviar correos tanto para reestablecer la contraseña como para verificar el usuario.
 @Configuration
 public class EmailConfig {
 

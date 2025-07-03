@@ -5,12 +5,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+//Servicios para enviar gmails a los usuarios
 @Service
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
+    // Correo para verificar la cuenta de un usuario
     public void enviarCorreoVerificacion(String destinatario, String token) {
         String asunto = "Verifica tu cuenta";
         String enlace = "http://localhost:4200/verificar?token=" + token;
@@ -24,6 +26,7 @@ public class EmailService {
         mailSender.send(mensaje);
     }
 
+    // Correo para cambiar la cuenta de un usuario
     public void enviarCorreoRecuperacion(String destinatario, String token) {
         String asunto = "Recuperación de contraseña";
         String enlace = "http://localhost:4200/restablecer-contrasena?token=" + token;

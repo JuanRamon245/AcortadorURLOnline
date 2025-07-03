@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './pagina-login.component.html',
   styleUrl: './pagina-login.component.scss'
 })
+
 export class PaginaLoginComponent {
   modo: 'login' | 'registro' = 'login';
 
@@ -32,16 +33,18 @@ export class PaginaLoginComponent {
   nombre = '';
   repetirContrasena = '';
 
+  // Método para verificar si el correo electronico cumple con las normas
   validarCorreo(correo: string): boolean {
     const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regexCorreo.test(correo);
   }
-
+  // Método para verificar si el nombre cumple con las normas
   validarNombre(nombre: string): boolean {
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
     return regexNombre.test(nombre);
   }
 
+  // Método para borrar todos los datos y notificaciones de login o registro al cambiar
   cambiarModo(nuevoModo: 'login' | 'registro') {
     this.modo = nuevoModo;
     this.mensaje = '';
@@ -54,6 +57,7 @@ export class PaginaLoginComponent {
     this.mostrarRepetir = false;
   }
 
+  // Método para redirigir a la página normal y loguearse en caso de que cumpla con lo establecido y del back
   iniciarSesion() {
     if (this.correo === '') {
       this.mensaje = 'El campo correo está vacío';
@@ -83,6 +87,7 @@ export class PaginaLoginComponent {
     }
   }
 
+  // Método para mandar una verificación y crear un usuario en la bbdd de la web en caso de que cumpla con lo establecido y del back
   registrarse() {
     if (this.nombre === '') {
       this.mensaje = 'El campo nombre está vacío';
@@ -127,14 +132,17 @@ export class PaginaLoginComponent {
     }
   }
 
+  // Método que muestra el panel para poder recuperar la contraseña del usuario
   panelRecuperarContrasena() {
     this.mostrarRecuperarContrasena = true;
   }
 
+  // Método que deja de mostrar el panel para poder recuperar la contraseña del usuario
   cerrarRecuperarContrasena() {
     this.mostrarRecuperarContrasena = false;
   }
 
+  // Método para cerrar el panel de recuperar la contraseña en caso de tocar fuera en vez de la 'x' para cerrar
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     if (this.mostrarRecuperarContrasena && this.modalContrasenaRef) {
@@ -145,6 +153,8 @@ export class PaginaLoginComponent {
     }
   }
 
+  // Método para enviar el correo de recuperación de contraseña del usuario en caso de solicitarlo
+  // con el panel y mostrar una notificación dependiendo del resultado
   enviarCorreoRecuperacionContrasena() {
     this.URLServicio.enviarCorreoRecuperar(this.correoUsuario).subscribe({
       next: () => {

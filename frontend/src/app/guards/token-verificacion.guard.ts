@@ -4,6 +4,8 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 @Injectable({
   providedIn: 'root',
 })
+
+// Guard encargado de proteger el redirecionamiento del usuario en la web si el usuario no tiene un token para realizar una acción necesaria
 export class TokenVerificacionGuard implements CanActivate {
 
   constructor(private router: Router) {}
@@ -13,7 +15,6 @@ export class TokenVerificacionGuard implements CanActivate {
     if (token) {
       return true;
     } else {
-      // redirigir si no viene con token
       this.router.navigate(['/']);
       return false;
     }

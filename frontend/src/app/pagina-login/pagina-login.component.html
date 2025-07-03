@@ -1,44 +1,46 @@
-<div class="contenedorLog">
-  <div class="contenedorSwitch">
-    <button class="switchLog" [class.activo]="modo === 'login'" (click)="cambiarModo('login')">Acceso</button>
-    <button class="switchLog" [class.activo]="modo === 'registro'" (click)="cambiarModo('registro')">Registro</button>
-  </div>
+<div class="wrapper-cuerpo">
+  <div class="contenedorLog">
+    <div class="contenedorSwitch">
+      <button class="switchLog" [class.activo]="modo === 'login'" (click)="cambiarModo('login')">Acceso</button>
+      <button class="switchLog" [class.activo]="modo === 'registro'" (click)="cambiarModo('registro')">Registro</button>
+    </div>
 
-  <div class="tipoAcceso">
-    <form *ngIf="modo === 'login'" (ngSubmit)="iniciarSesion()">
-      <input type="email" maxlength="40" placeholder="Correo" [(ngModel)]="correo" name="correo" required />
-      <div class="inputConIcono">
-        <input [type]="mostrarContrasenaLogin ? 'text' : 'password'" maxlength="30" placeholder="Contraseña"
-              [(ngModel)]="contrasena" name="contrasena" required />
-        <button type="button" (click)="mostrarContrasenaLogin = !mostrarContrasenaLogin" class="iconoOjo material-icons">
-          {{ mostrarContrasenaLogin ? 'visibility' : 'visibility_off' }}
-        </button>
-      </div>
-      <p class="error">{{ mensaje }}</p>
-      <button type="submit" class="botonAcceso">Loguearse</button>
-      <p class="enlace" (click)="panelRecuperarContrasena()">¿Te has olvidado de la contraseña?</p>
-    </form>
+    <div class="tipoAcceso">
+      <form *ngIf="modo === 'login'" (ngSubmit)="iniciarSesion()">
+        <input type="email" maxlength="40" placeholder="Correo" [(ngModel)]="correo" name="correo" required />
+        <div class="inputConIcono">
+          <input [type]="mostrarContrasenaLogin ? 'text' : 'password'" maxlength="30" placeholder="Contraseña"
+                [(ngModel)]="contrasena" name="contrasena" required />
+          <button type="button" (click)="mostrarContrasenaLogin = !mostrarContrasenaLogin" class="iconoOjo material-icons">
+            {{ mostrarContrasenaLogin ? 'visibility' : 'visibility_off' }}
+          </button>
+        </div>
+        <p class="error">{{ mensaje }}</p>
+        <button type="submit" class="botonAcceso">Loguearse</button>
+        <p class="enlace" (click)="panelRecuperarContrasena()">¿Te has olvidado de la contraseña?</p>
+      </form>
 
-    <form *ngIf="modo === 'registro'" (ngSubmit)="registrarse()">
-      <input type="text" maxlength="20" placeholder="Nombre" [(ngModel)]="nombre" name="nombre" required />
-      <input type="email" maxlength="40" placeholder="Correo" [(ngModel)]="correo" name="correo" required />
-      <div class="inputConIcono">
-        <input [type]="mostrarContrasenaRegistro ? 'text' : 'password'" maxlength="30" placeholder="Contraseña"
-              [(ngModel)]="contrasena" name="contrasena" required />
-        <button type="button" (click)="mostrarContrasenaRegistro = !mostrarContrasenaRegistro" class="iconoOjo material-icons">
-          {{ mostrarContrasenaRegistro ? 'visibility' : 'visibility_off' }}
-        </button>
-      </div>
-      <div class="inputConIcono">
-        <input [type]="mostrarRepetir ? 'text' : 'password'" maxlength="30" placeholder="Repetir contraseña"
-              [(ngModel)]="repetirContrasena" name="repetirContrasena" required />
-        <button type="button" (click)="mostrarRepetir = !mostrarRepetir" class="iconoOjo material-icons">
-          {{ mostrarRepetir ? 'visibility' : 'visibility_off' }}
-        </button>
-      </div>
-      <p class="error">{{ mensaje }}</p>
-      <button type="submit" class="botonAcceso">Crear cuenta</button>
-    </form>
+      <form *ngIf="modo === 'registro'" (ngSubmit)="registrarse()">
+        <input type="text" maxlength="20" placeholder="Nombre" [(ngModel)]="nombre" name="nombre" required />
+        <input type="email" maxlength="40" placeholder="Correo" [(ngModel)]="correo" name="correo" required />
+        <div class="inputConIcono">
+          <input [type]="mostrarContrasenaRegistro ? 'text' : 'password'" maxlength="30" placeholder="Contraseña"
+                [(ngModel)]="contrasena" name="contrasena" required />
+          <button type="button" (click)="mostrarContrasenaRegistro = !mostrarContrasenaRegistro" class="iconoOjo material-icons">
+            {{ mostrarContrasenaRegistro ? 'visibility' : 'visibility_off' }}
+          </button>
+        </div>
+        <div class="inputConIcono">
+          <input [type]="mostrarRepetir ? 'text' : 'password'" maxlength="30" placeholder="Repetir contraseña"
+                [(ngModel)]="repetirContrasena" name="repetirContrasena" required />
+          <button type="button" (click)="mostrarRepetir = !mostrarRepetir" class="iconoOjo material-icons">
+            {{ mostrarRepetir ? 'visibility' : 'visibility_off' }}
+          </button>
+        </div>
+        <p class="error">{{ mensaje }}</p>
+        <button type="submit" class="botonAcceso">Crear cuenta</button>
+      </form>
+    </div>
   </div>
 </div>
 

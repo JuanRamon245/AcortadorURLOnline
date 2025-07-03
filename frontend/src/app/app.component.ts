@@ -36,6 +36,8 @@ export class AppComponent implements OnInit {
   @ViewChild('modalDatos') modalDatos!: ElementRef;
 
   constructor (private servicioURL : ServicioURLService, private router: Router) { }
+
+  // Método para obtener al iniciar el usuario y la contraseña y modificar dependiendo los datos y eventos mostrar o no el registro, usuario, tus urls o volver
   ngOnInit(): void {
     this.servicioURL.getUsuario().subscribe({
       next: (res) => this.respuesta = res,
@@ -63,6 +65,7 @@ export class AppComponent implements OnInit {
       });
   }
 
+  // Método para redirigir al login en caso de que el usuario no este registrado
   toggleMenu() {
     if (this.respuesta !== 'Registrarse') {
       this.mostrarDropdown = !this.mostrarDropdown;
@@ -71,27 +74,17 @@ export class AppComponent implements OnInit {
     }
   }
 
-  cambiarDatos() {
-    this.mostrarDropdown = false;
-    this.router.navigate(['/pagina-cambiar-datos']);
-  }
-
-  redirigirALogin() {
-    if (this.respuesta !== 'Registrarse') {
-      this.mostrarModal = true;
-    } else {
-      this.router.navigate(['/pagina-login']);
-    }
-  }
-
+  // Método para redirigir al usuario a la página de urls acortadas por él
   redirigirURLs() {
       this.router.navigate(['/pagina-url-acortadas-usuario']);
   }
 
+  // Método para cerrar el menú de cerrar sesión
   cerrarModal() {
     this.mostrarModal = false;
   }
 
+  // Método para cerrar sesión del usuario actualmente logueado
   cerrarSesion() {
     this.servicioURL.logout().subscribe({
       next: () => {
@@ -104,6 +97,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // Método para cerrar los menús si se toca por fuera
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInsideDropdown = this.dropdownMenu?.nativeElement.contains(event.target);
@@ -124,10 +118,12 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // Método para redirigir el usuario la página inicial
   volverHome() {
     this.router.navigate(['/']);
   }
 
+  // Método para mostrar notificaciones
   abrirModalDesdeDropdown() {
     this.mostrarDropdown = false;
 
@@ -136,6 +132,7 @@ export class AppComponent implements OnInit {
     }, 10);
   }
 
+  // Método para abrir el menú de los datos del usuario
   abrirModalDatos() {
     this.mostrarDropdown = false;
 
@@ -154,10 +151,12 @@ export class AppComponent implements OnInit {
     console.log(this.contrasenaUsuario);
   }
 
+  // Método para cerrar el menú del usuario
   cerrarModalDatos() {
     this.mostrarDatos = false;
   }
 
+  // Método para guardar los nuevos datos del usuario en la bbdd
   guardarCambiosUsuario() {
     console.log('Intentando actualizar con:', this.nombreUsuario, this.correoUsuario, this.contrasenaUsuario);
     const nuevosDatos = {

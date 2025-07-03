@@ -7,13 +7,15 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+
+// Guard encargado de proteger el redirecionamiento del usuario en la web si no está autorizado
 export class AuthGuard implements CanActivate {
 
   constructor(private servicioURL: ServicioURLService, private router: Router) {}
 
   canActivate(): Observable<boolean> {
     return this.servicioURL.getUsuario().pipe(
-      map(() => true), // acceso permitido si está logueado
+      map(() => true),
       catchError(() => {
         this.router.navigate(['/']);
         return of(false);

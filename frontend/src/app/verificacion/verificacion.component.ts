@@ -20,6 +20,7 @@ export class VerificacionComponent implements OnInit {
     private servicioURL: ServicioURLService,
   ) {}
 
+  // Método para verificar si el usuario que ha accedido a la web contiene un token y coincide con el de la bbdd
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
     console.log("Token recibido:", token);

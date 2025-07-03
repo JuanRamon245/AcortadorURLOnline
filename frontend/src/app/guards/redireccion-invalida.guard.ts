@@ -4,6 +4,8 @@ import { CanActivate, Router, ActivatedRouteSnapshot, UrlTree } from '@angular/r
 @Injectable({
   providedIn: 'root'
 })
+
+// Guard encargado de proteger el redirecionamiento del usuario en la web si el usuario intenta acceder una instancia que no debe
 export class RedireccionInvalidaGuard implements CanActivate {
   constructor(private router: Router) {}
 

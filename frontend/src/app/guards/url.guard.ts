@@ -5,6 +5,8 @@ import { ServicioURLService } from '../services/servicio-url.service';
 @Injectable({
   providedIn: 'root'
 })
+
+// Guard encargado de proteger el redirecionamiento del usuario en la web si el usuario no ha acortado una url por lo menos
 export class UrlGuard implements CanActivate {
 
   constructor(private servicioURL: ServicioURLService, private router: Router) {}
@@ -13,7 +15,6 @@ export class UrlGuard implements CanActivate {
     const haAcortado = this.servicioURL.haAcortadoAlMenosUna();
 
     if (!haAcortado) {
-      // Redirección forzada para que se recargue correctamente el componente inicial
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/']);
       });

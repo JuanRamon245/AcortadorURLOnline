@@ -20,10 +20,12 @@ export class RestablecerContrasenaComponent {
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private servicioURL: ServicioURLService,) {}
 
+  // Método para recoger el token de la url donde fué redirigido el usuario
   ngOnInit() {
     this.token = this.route.snapshot.queryParamMap.get('token') ?? '';
   }
 
+  // Método para restablecer la contraseña, se revisa si los datos están completos y a partir de ahi en el back se encarga de modificarla para el usuario
   restablecerContrasena() {
     if (!this.nuevaContrasenaUsuario || !this.token) {
       this.modo = 'error';

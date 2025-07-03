@@ -8,6 +8,7 @@ import { ServicioURLService } from '../services/servicio-url.service';
   providedIn: 'root'
 })
 
+// Guard encargado de proteger el redirecionamiento del usuario en la web si está autorizado
 export class noAuthGuard implements CanActivate {
   constructor(private servicioURL: ServicioURLService, private router: Router) {}
 

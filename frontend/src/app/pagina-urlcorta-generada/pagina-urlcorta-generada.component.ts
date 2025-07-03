@@ -15,6 +15,7 @@ export class PaginaURLCortaGeneradaComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  // Método para recibir la url acortada en lapagina previa y poder escribirlo donde toca
   ngOnInit(): void {
     const state = window.history.state as { url?: string };
 
@@ -25,6 +26,7 @@ export class PaginaURLCortaGeneradaComponent implements OnInit {
     }
   }
 
+  // Método para poder copiar en el portapapeles la url acortada 
   copiarAlPortapapeles() {
     navigator.clipboard.writeText(this.urlAcortada).then(() => {
       console.log('Copiado al portapapeles');

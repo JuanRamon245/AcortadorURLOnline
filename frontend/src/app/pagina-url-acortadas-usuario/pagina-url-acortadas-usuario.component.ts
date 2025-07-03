@@ -10,6 +10,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './pagina-url-acortadas-usuario.component.html',
   styleUrl: './pagina-url-acortadas-usuario.component.scss'
 })
+
 export class PaginaUrlAcortadasUsuarioComponent {
   urls: any[] = [];
   mensaje: string | null = null;
@@ -17,14 +18,14 @@ export class PaginaUrlAcortadasUsuarioComponent {
   mostrarModal: boolean = false;
   idParaEliminar: string | null = null;
 
-
-
   constructor(private servicioURL: ServicioURLService) {}
 
- ngOnInit(): void {
+  // Método para cargar las urls acortadas del usuario al entrar a la página
+  ngOnInit(): void {
     this.cargarUrls();
   }
 
+  // Método que carga las urls del usuario que esté logueado en la sesión
   cargarUrls(): void {
     this.servicioURL.getUrlsDelUsuario().subscribe({
       next: (res) => {
@@ -39,6 +40,7 @@ export class PaginaUrlAcortadasUsuarioComponent {
     });
   }
 
+  // Método para que el número de usos de la url acortada no sea más que 99 y menos de que 1
   guardarUsos(url: any) {
     const usos = Number(url.nuevosUsos);
 
@@ -58,16 +60,19 @@ export class PaginaUrlAcortadasUsuarioComponent {
     });
   }
 
+  // Método para abrir el panel que sirve para eliminar la url acortada
   confirmarEliminacion(shortId: string) {
     this.mostrarModal = true;
     this.idParaEliminar = shortId;
   }
 
+  // Método para cerrar el panel que sirve para eliminar la url acortada
   cancelarEliminacion() {
     this.mostrarModal = false;
     this.idParaEliminar = null;
   }
 
+  // Método para confirmar la eliminación de la url acortada y eliminarla en el back de la bbdd
   eliminarConfirmado() {
     if (!this.idParaEliminar) return;
 
@@ -86,6 +91,7 @@ export class PaginaUrlAcortadasUsuarioComponent {
   }
 
 
+  // Método para que el input del número de usos no ponga nunca más que 99 y menos que 1
   validarInput(event: KeyboardEvent, url: any) {
     const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
     const isNumber = /^[0-9]$/.test(event.key);
@@ -104,10 +110,12 @@ export class PaginaUrlAcortadasUsuarioComponent {
     });
   }
 
+  // Método que previene que el usuario pueda pegar cosas en el input
   evitarPegar(event: ClipboardEvent) {
     event.preventDefault();
   }
 
+  // Método para mostrar la notificación de exito o error dependiendo del evento recibido
   mostrarMensaje(texto: string, tipo: 'exito' | 'error' = 'exito') {
     this.mensaje = texto;
     this.tipoMensaje = tipo;

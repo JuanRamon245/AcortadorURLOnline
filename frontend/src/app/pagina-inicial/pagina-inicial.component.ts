@@ -12,6 +12,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './pagina-inicial.component.html',
   styleUrl: './pagina-inicial.component.scss'
 })
+
 export class PaginaInicialComponent {
   tipoMensaje: 'exito' | 'error' = 'exito';
   urlInput: string = '';
@@ -20,12 +21,16 @@ export class PaginaInicialComponent {
 
   constructor(private http: HttpClient, private router: Router, private URLServicio: ServicioURLService) {}
 
+  // Método para acortar las urls de los usuarios
   acortarUrl() {
+    // Se verifica si está vacia
     if (this.urlInput.trim() === '') {
       this.notificacion='Error: la URL está vacía';
       return;
     }
 
+    // Se recoge el correo del usuario para después verificar si la url es correcta y accesible
+    // para después acortarla y redirigir a la agina donde se podrá ver la url acortada generada
     this.URLServicio.getCorreo().subscribe({
       next: (correoRes) => {
         this.correo = correoRes;

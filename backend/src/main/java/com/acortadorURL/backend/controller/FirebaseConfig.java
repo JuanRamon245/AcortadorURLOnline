@@ -10,6 +10,7 @@ import com.google.firebase.FirebaseOptions;
 
 import jakarta.annotation.PostConstruct;
 
+//Clase de configuración para conectarse a la base de datos de firebase y ejecutar todo lo necesario.
 @Configuration
 public class FirebaseConfig {
 
