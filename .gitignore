@@ -1,0 +1,20 @@
+# Backend
+/target/
+/*.iml
+*.log
+*.class
+*.jar
+application.properties
+acortadorurls-6df6f-firebase-adminsdk-fbsvc-49be352c64.json
+
+# Frontend
+/node_modules/
+/dist/
+/.angular/
+
+# Sistema
+.DS_Store
+*.env
+*.key
+*.pem
+*.p12
