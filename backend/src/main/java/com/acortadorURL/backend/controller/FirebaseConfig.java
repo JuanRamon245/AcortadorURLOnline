@@ -1,6 +1,8 @@
 package com.acortadorURL.backend.controller;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Base64;
 
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +19,15 @@ public class FirebaseConfig {
     @PostConstruct
     public void init() {
         try {
-            FileInputStream serviceAccount = new FileInputStream(
-                    "src/main/resources/acortadorurls-6df6f-firebase-adminsdk-fbsvc-49be352c64.json");
+            String firebaseConfigBase64 = System.getenv("FIREBASE_CONFIG_BASE64");
+
+            if (firebaseConfigBase64 == null || firebaseConfigBase64.isEmpty()) {
+                throw new IllegalStateException("La variable de entorno FIREBASE_CONFIG_BASE64 no está configurada");
+            }
+
+            byte[] decodedBytes = Base64.getDecoder().decode(firebaseConfigBase64);
+
+            InputStream serviceAccount = new ByteArrayInputStream(decodedBytes);
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
