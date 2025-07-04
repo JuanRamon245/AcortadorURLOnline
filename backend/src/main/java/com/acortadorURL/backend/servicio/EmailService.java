@@ -15,7 +15,7 @@ public class EmailService {
     // Correo para verificar la cuenta de un usuario
     public void enviarCorreoVerificacion(String destinatario, String token) {
         String asunto = "Verifica tu cuenta";
-        String enlace = "http://localhost:4200/verificar?token=" + token;
+        String enlace = "https://acortadorurlonline-frontend.onrender.com/verificar?token=" + token;
         String cuerpo = "Gracias por registrarte. Haz clic en el siguiente enlace para verificar tu cuenta: " + enlace;
 
         SimpleMailMessage mensaje = new SimpleMailMessage();
@@ -29,7 +29,7 @@ public class EmailService {
     // Correo para cambiar la cuenta de un usuario
     public void enviarCorreoRecuperacion(String destinatario, String token) {
         String asunto = "Recuperación de contraseña";
-        String enlace = "http://localhost:4200/restablecer-contrasena?token=" + token;
+        String enlace = "https://acortadorurlonline-frontend.onrender.com/restablecer-contrasena?token=" + token;
         String cuerpo = "Haz clic en el siguiente enlace para restablecer tu contraseña: " + enlace;
 
         SimpleMailMessage mensaje = new SimpleMailMessage();

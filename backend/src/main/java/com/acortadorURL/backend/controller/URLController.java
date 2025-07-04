@@ -40,7 +40,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 //Controlador con todos los métodos y llamadas con la bbdd de Firebase y que permite también conectar el back con el front.
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = "https://acortadorurlonline-frontend.onrender.com", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/URL")
 public class URLController {
@@ -175,7 +175,7 @@ public class URLController {
 
             if (resultadoUrl[0] != null) {
                 System.out.println("URL ya existente con ID: " + resultadoUrl[0]);
-                String existingShortUrl = "http://localhost:8080/" + resultadoUrl[0];
+                String existingShortUrl = "https://acortadorurlonline.onrender.com" + resultadoUrl[0];
                 return ResponseEntity.ok(existingShortUrl);
             }
 
@@ -188,7 +188,7 @@ public class URLController {
 
             ref.setValueAsync(data);
 
-            String shortUrl = "http://localhost:8080/" + shortId;
+            String shortUrl = "https://acortadorurlonline.onrender.com" + shortId;
             return ResponseEntity.ok(shortUrl);
 
         } catch (Exception e) {
@@ -256,7 +256,8 @@ public class URLController {
 
                 response.sendRedirect(originalUrl);
             } else {
-                response.sendRedirect("http://localhost:4200/pagina-redireccion-incorrecta?origen=backend");
+                response.sendRedirect(
+                        "https://acortadorurlonline-frontend.onrender.com/pagina-redireccion-incorrecta?origen=backend");
             }
         } catch (Exception e) {
             if (e.getMessage().contains("usos disponibles")) {
