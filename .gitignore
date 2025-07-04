@@ -4,8 +4,8 @@
 *.log
 *.class
 *.jar
-application.properties
-acortadorurls-6df6f-firebase-adminsdk-fbsvc-49be352c64.json
+/backend/src/main/resources/application.properties
+/backend/src/main/resources/acortadorurls-6df6f-firebase-adminsdk-*.json
 
 # Frontend
 /node_modules/
