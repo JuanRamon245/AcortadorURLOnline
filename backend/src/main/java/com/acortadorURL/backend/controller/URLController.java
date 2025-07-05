@@ -40,7 +40,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 //Controlador con todos los métodos y llamadas con la bbdd de Firebase y que permite también conectar el back con el front.
-@CrossOrigin(origins = "https://juanramon245.github.io/AcortadorURLOnline/", allowCredentials = "true")
+@CrossOrigin(origins = "https://juanramon245.github.io/AcortadorURLOnline/#/", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/URL")
 public class URLController {
@@ -175,7 +175,7 @@ public class URLController {
 
             if (resultadoUrl[0] != null) {
                 System.out.println("URL ya existente con ID: " + resultadoUrl[0]);
-                String existingShortUrl = "https://juanramon245.github.io/AcortadorURLOnline/" + resultadoUrl[0];
+                String existingShortUrl = "https://juanramon245.github.io/AcortadorURLOnline/#/" + resultadoUrl[0];
                 return ResponseEntity.ok(existingShortUrl);
             }
 
@@ -188,7 +188,7 @@ public class URLController {
 
             ref.setValueAsync(data);
 
-            String shortUrl = "https://juanramon245.github.io/AcortadorURLOnline/" + shortId;
+            String shortUrl = "https://juanramon245.github.io/AcortadorURLOnline/#/" + shortId;
             return ResponseEntity.ok(shortUrl);
 
         } catch (Exception e) {
@@ -257,7 +257,7 @@ public class URLController {
                 response.sendRedirect(originalUrl);
             } else {
                 response.sendRedirect(
-                        "https://juanramon245.github.io/AcortadorURLOnline/pagina-redireccion-incorrecta?origen=backend");
+                        "https://juanramon245.github.io/AcortadorURLOnline/#/pagina-redireccion-incorrecta?origen=backend");
             }
         } catch (Exception e) {
             if (e.getMessage().contains("usos disponibles")) {

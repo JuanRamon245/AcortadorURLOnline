@@ -70,7 +70,7 @@ export class PaginaLoginComponent {
          this.URLServicio.acceder(this.correo, this.contrasena).subscribe({
           next: (respuesta: string) => {
             if (respuesta.includes('Inicio de sesión exitoso')) {
-              window.location.href = '/AcortadorURLOnline/';
+              window.location.href = '/AcortadorURLOnline/#/';
             } else {
               this.mensaje = respuesta;
             }
