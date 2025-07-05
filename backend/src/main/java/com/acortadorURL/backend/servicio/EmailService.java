@@ -29,7 +29,7 @@ public class EmailService {
     // Correo para cambiar la cuenta de un usuario
     public void enviarCorreoRecuperacion(String destinatario, String token) {
         String asunto = "Recuperación de contraseña";
-        String enlace = "https://acortadorurlonline-frontend.onrender.com/restablecer-contrasena?token=" + token;
+        String enlace = "https://juanramon245.github.io/AcortadorURLOnline/restablecer-contrasena?token=" + token;
         String cuerpo = "Haz clic en el siguiente enlace para restablecer tu contraseña: " + enlace;
 
         SimpleMailMessage mensaje = new SimpleMailMessage();
