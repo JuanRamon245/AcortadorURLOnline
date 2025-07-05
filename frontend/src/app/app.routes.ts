@@ -14,6 +14,17 @@ import { RestablecerContrasenaComponent } from './restablecer-contrasena/restabl
 
 export const routes: Routes = [
   { path: '', component: PaginaInicialComponent },
+  { path: 'pagina-urlcorta-generada', component: PaginaURLCortaGeneradaComponent },
+  { path: 'pagina-login', component: PaginaLoginComponent },
+  { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent },
+  { path: 'pagina-redireccion-incorrecta', component: PaginaRedireccionIncorrectaComponent },
+  { path: 'verificar', component: VerificacionComponent  },
+  { path: 'restablecer-contrasena', component: RestablecerContrasenaComponent  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
+];
+
+/*export const routes: Routes = [
+  { path: '', component: PaginaInicialComponent },
   { path: 'pagina-urlcorta-generada', component: PaginaURLCortaGeneradaComponent, canActivate: [UrlGuard] },
   { path: 'pagina-login', component: PaginaLoginComponent, canActivate: [noAuthGuard] },
   { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent, canActivate: [AuthGuard] },
@@ -22,3 +33,4 @@ export const routes: Routes = [
   { path: 'restablecer-contrasena', component: RestablecerContrasenaComponent , canActivate: [TokenVerificacionGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
+*/

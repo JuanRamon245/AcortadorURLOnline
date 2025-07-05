@@ -19,20 +19,20 @@ html, body {
   height: 10vh;
   box-sizing: border-box;
   background-image:
-    repeating-linear-gradient(50deg, rgb(74, 123, 184) 4px, rgb(74, 123, 184) 12px, transparent 2px, transparent 30px),
-    repeating-linear-gradient(-50deg, rgb(74, 123, 184) 4px, rgb(74, 123, 184) 12px, transparent 2px, transparent 30px);
+    repeating-linear-gradient(50deg, rgb(74, 123, 184) 0.2rem, rgb(74, 123, 184) 0.7rem, transparent 0.1rem, transparent 1.7rem),
+    repeating-linear-gradient(-50deg, rgb(74, 123, 184) 0.2rem, rgb(74, 123, 184) 0.7rem, transparent 0.1rem, transparent 1.7rem);
 }
 
 .mensajeEnlace {
   font-size: 2.5rem;
   margin-left: 1.5rem;
-  padding: 2px 10px;
+  padding: 0.1rem 0.6rem;
   color: white;
   cursor: pointer;
   font-family: 'Ubuntu', sans-serif;
   background-color: rgb(54, 74, 99);
-  border-radius: 6px;
-  border: 2px solid rgb(54, 74, 99);
+  border-radius: 0.2rem;
+  border: 0.1rem solid rgb(54, 74, 99);
   font-weight: bold;
   text-shadow: -0.2rem 0.2rem 0 #4d8cf3;
 }
@@ -40,13 +40,13 @@ html, body {
 .perfilUsuario {
   font-size: 2.5rem;
   margin-right: 1.5rem;
-  padding: 2px 10px;
+  padding: 0.1rem 0.6rem;
   color: white;
   cursor: pointer;
   font-family: 'Ubuntu', sans-serif;
   background-color: rgb(54, 74, 99);
-  border-radius: 6px;
-  border: 2px solid rgb(54, 74, 99);
+  border-radius: 0.2rem;
+  border: 0.1rem solid rgb(54, 74, 99);
   font-weight: bold;
   text-shadow: -0.2rem 0.2rem 0 #4d8cf3;
 }
@@ -86,7 +86,7 @@ html, body {
 
 .modal {
   background: #f5f5f5;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   position: relative;
   text-align: center;
   border: 0.15rem solid rgb(40, 73, 112);
@@ -94,18 +94,18 @@ html, body {
 }
 
 .paddin1 {
-  padding: 50px 120px;
+  padding: 3rem 6rem;
 }
 
 .paddin2 {
-  padding: 30px 50px;
+  padding: 2rem 3rem;
 }
 
 .modal h2 {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
   color:#4d8cf3;
   font-family: 'Ubuntu', sans-serif;
-  font-size: 35px;
+  font-size: 2.3rem;
   font-weight: bold;
 }
 
@@ -118,22 +118,22 @@ html, body {
 }
 
 .modal button {
-  padding: 10px 20px;
-  margin-top: 30px;
+  padding: 0.6rem 1.2rem;
+  margin-top: 2rem;
   font-family: 'Ubuntu', sans-serif;
-  font-size: 25px;
+  font-size: 1.8rem;
   font-weight: bold;
   cursor: pointer;
 }
 
 .cerrar {
   position: absolute;
-  top: -25px;
-  right: 10px;
+  top: -1.8rem;
+  right: 0.6rem;
   border: none;
   background: transparent;
   color: #4d8cf3;
-  font-size: 35px !important;
+  font-size: 2.3rem !important;
   cursor: pointer;
   line-height: 1;
 }
@@ -148,7 +148,7 @@ html, body {
   right: 1rem;
   top: 5rem;
   background-color: white;
-  border-radius: 6px;
+  border-radius: 0.2rem;
   border: 0.1rem solid rgb(40, 73, 112);
   box-shadow: -0.4rem 0.4rem 0 rgb(54, 74, 99);
   display: flex;
@@ -174,13 +174,13 @@ html, body {
 
 
 .imaginput {
-  margin-left: 50px;
-  padding: 6px 12px;
-  border-radius: 10px;
+  margin-left: 3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
   border: 1px solid #ccc;
-  width: 300px;
+  width: 20rem;
   text-align: center;
-  font-size: 20px;
+  font-size: 1.5rem;
 }
 
 button {
@@ -188,7 +188,7 @@ button {
   color: white;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.3rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 1.5rem;
   cursor: pointer;
@@ -198,27 +198,27 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-right: 40px;
-  margin-bottom: 10px;
-  font-size: 20px;
+  margin-right: 2.7rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.5rem;
 }
 
 .form-group label {
-  width: 120px;
+  width: 7rem;
   text-align: right;
-  margin-right: 10px;
+  margin-right: 0.6rem;
 }
 
 .correoTexto {
   margin: 0;
-  padding: 6px 12px;
-  font-size: 20px;
+  padding: 0.1rem 0.6rem;
+  font-size: 1.72rem;
   background-color: #f5f5f5;
-  border-radius: 10px;
-  width: 300px;
-  margin-left: 50px;
+  border-radius: 0.6rem;
+  width: 20rem;
+  margin-left: 3rem;
   text-align: center;
-  border: 1px solid #ccc;
+  border: 0.05rem solid #ccc;
 }
 
 .guardarCerrar {
@@ -236,13 +236,13 @@ button {
 }
 
 .notificacion {
-  margin-top: 50px;
+  margin-top: 3rem;
   position: fixed;
-  top: 20px;
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  padding: 20px 35px;
-  border-radius: 10px;
+  padding: 1rem 2.3rem;
+  border-radius: 0.6rem;
   font-family: 'Ubuntu', sans-serif;
   font-size: 1.2rem;
   background-color: #f5f5f5;
@@ -256,14 +256,14 @@ button {
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  0% { opacity: 0; transform: translateX(-50%) translateY(-0.6rem); }
   10% { opacity: 1; transform: translateX(-50%) translateY(0); }
   90% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-0.6rem); }
 }
 
 .icono-refresh {
-  margin-left: 10px;
+  margin-left: 0.6rem;
   vertical-align: middle;
   display: inline-block;
   animation: rotarYZoom 1s forwards ease;
