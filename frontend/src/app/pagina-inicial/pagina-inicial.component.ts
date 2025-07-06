@@ -46,7 +46,7 @@ export class PaginaInicialComponent {
               this.URLServicio.acortarUrl(this.urlInput, this.correo).subscribe({
                 next: (urlCorta) => {
                   const id = urlCorta.split('/').pop();
-                  const urlFinal = `https://acortadorurlonline.onrender.com/api/URL/r/${id}`;
+                  const urlFinal = `https://acortadorurlonline-production.up.railway.app/api/URL/r/${id}`;
                   this.URLServicio.marcarComoAcortado();
                   this.router.navigate(['/pagina-urlcorta-generada'], {
                     state: { url: urlFinal }

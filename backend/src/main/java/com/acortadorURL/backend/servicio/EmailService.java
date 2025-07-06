@@ -28,6 +28,8 @@ public class EmailService {
 
     // Correo para cambiar la cuenta de un usuario
     public void enviarCorreoRecuperacion(String destinatario, String token) {
+        System.out.println("Hemos llegadoa  enviar el correo: Mail username: " + System.getenv("MAIL_USERNAME"));
+
         String asunto = "Recuperación de contraseña";
         String enlace = "https://juanramon245.github.io/AcortadorURLOnline/#/restablecer-contrasena?token=" + token;
         String cuerpo = "Haz clic en el siguiente enlace para restablecer tu contraseña: " + enlace;

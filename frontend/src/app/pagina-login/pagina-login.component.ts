@@ -134,7 +134,10 @@ export class PaginaLoginComponent {
 
   // Método que muestra el panel para poder recuperar la contraseña del usuario
   panelRecuperarContrasena() {
-    this.mostrarRecuperarContrasena = true;
+    setTimeout(() => {
+      this.mostrarRecuperarContrasena = true;
+      console.log("Abriendo modal de recuperar contraseña");
+    });
   }
 
   // Método que deja de mostrar el panel para poder recuperar la contraseña del usuario
