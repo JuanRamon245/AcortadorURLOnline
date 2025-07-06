@@ -15,7 +15,7 @@ public class EmailService {
     // Correo para verificar la cuenta de un usuario
     public void enviarCorreoVerificacion(String destinatario, String token) {
         String asunto = "Verifica tu cuenta";
-        String enlace = "https://acortadorurlonline-frontend.onrender.com/#/verificar?token=" + token;
+        String enlace = "https://juanramon245.github.io/AcortadorURLOnline/#/verificar?token=" + token;
         String cuerpo = "Gracias por registrarte. Haz clic en el siguiente enlace para verificar tu cuenta: " + enlace;
 
         SimpleMailMessage mensaje = new SimpleMailMessage();
