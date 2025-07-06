@@ -9,43 +9,53 @@ html, body {
   height: 100vh;
 }
 
-.filaSuperior {
-  display:flex;
+.centro {
+  display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.filaSuperior {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem; 
   padding: 1rem;
   background-color: #4d8cf3;
   border: 2px solid rgb(54, 74, 99);
-  height: 10vh;
+  height: 11vh;
   box-sizing: border-box;
   background-image:
     repeating-linear-gradient(50deg, rgb(74, 123, 184) 0.2rem, rgb(74, 123, 184) 0.7rem, transparent 0.1rem, transparent 1.7rem),
     repeating-linear-gradient(-50deg, rgb(74, 123, 184) 0.2rem, rgb(74, 123, 184) 0.7rem, transparent 0.1rem, transparent 1.7rem);
 }
 
+
 .mensajeEnlace {
   font-size: 2.5rem;
-  margin-left: 1.5rem;
-  padding: 0.1rem 0.6rem;
+  padding: 0.2rem 0.6rem;
   color: white;
   cursor: pointer;
   font-family: 'Ubuntu', sans-serif;
   background-color: rgb(54, 74, 99);
-  border-radius: 0.2rem;
+  border-radius: 0 0.6rem 0.6rem 0;
+  box-shadow: -0.3rem 0.3rem 0 #4d8cf3;
   border: 0.1rem solid rgb(54, 74, 99);
   font-weight: bold;
   text-shadow: -0.2rem 0.2rem 0 #4d8cf3;
+  margin-right: auto;
 }
 
 .perfilUsuario {
   font-size: 2.5rem;
-  margin-right: 1.5rem;
-  padding: 0.1rem 0.6rem;
+  padding: 0.2rem 0.6rem;
   color: white;
   cursor: pointer;
   font-family: 'Ubuntu', sans-serif;
   background-color: rgb(54, 74, 99);
-  border-radius: 0.2rem;
+  box-shadow: -0.3rem 0.3rem 0 #4d8cf3;
+  border-radius: 0.6rem 0 0 0.6rem;
   border: 0.1rem solid rgb(54, 74, 99);
   font-weight: bold;
   text-shadow: -0.2rem 0.2rem 0 #4d8cf3;
@@ -56,6 +66,7 @@ html, body {
   transition: background-color 0.5s;
   background-color: #4d8cf3;
   font-weight: bold;
+  box-shadow: -0.3rem 0.3rem 0 rgb(54, 74, 99);
   text-shadow: -0.2rem 0.2rem 0 rgb(54, 74, 99);
 }
 
@@ -64,6 +75,7 @@ html, body {
   transition: background-color 0.5s;
   background-color: #4d8cf3;
   font-weight: bold;
+  box-shadow: -0.3rem 0.3rem 0 rgb(54, 74, 99);
   text-shadow: -0.2rem 0.2rem 0 rgb(54, 74, 99);
 }
 

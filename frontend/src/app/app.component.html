@@ -1,16 +1,19 @@
 <div class="contenedor"  *ngIf="!esRutaVerificacion">
   <div class="filaSuperior">
-    <div class="mensajeEnlace"
-        [style.visibility]="(respuesta !== 'Registrarse' || estaEnLoginORegistro) ? 'visible' : 'hidden'"
-        (click)="(respuesta !== 'Registrarse' && esHome) ? redirigirURLs() : volverHome()">
-      {{ (respuesta !== 'Registrarse' && esHome) ? 'TUS URLs' : (estaEnLoginORegistro ? 'Volver' : '') }}
-    </div>
+    <div class="centro">
+      <p class="perfilUsuario" (click)="toggleMenu()" #menuTrigger>{{ respuesta }}</p>
+      <div class="mensajeEnlace"
+          [style.visibility]="(respuesta !== 'Registrarse' || estaEnLoginORegistro) ? 'visible' : 'hidden'"
+          (click)="(respuesta !== 'Registrarse' && esHome) ? redirigirURLs() : volverHome()">
+        {{ (respuesta !== 'Registrarse' && esHome) ? 'TUS URLs' : (estaEnLoginORegistro ? 'Volver' : '') }}
+      </div>
 
-    <p class="perfilUsuario" (click)="toggleMenu()" #menuTrigger>{{ respuesta }}</p>
+    
 
-    <div class="dropdown-menu" *ngIf="mostrarDropdown" #dropdownMenu>
-      <button (click)="abrirModalDatos()">Ver datos</button>
-      <button (click)="abrirModalDesdeDropdown()">Cerrar sesión</button>
+      <div class="dropdown-menu" *ngIf="mostrarDropdown" #dropdownMenu>
+        <button (click)="abrirModalDatos()">Ver datos</button>
+        <button (click)="abrirModalDesdeDropdown()">Cerrar sesión</button>
+      </div>
     </div>
   </div>
 

@@ -37,7 +37,7 @@ html, body {
   flex-direction: row;
   gap: 0.7rem;
   border-radius: 0.5rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   border: 0.15rem solid rgb(40, 73, 112);
   box-shadow: -0.2rem 0.2rem 0 rgb(54, 74, 99);
 }
@@ -45,6 +45,7 @@ html, body {
 .switchLog {
   height: 3.2rem;
   background-color: rgb(54, 74, 99);
+  border: 0.1rem solid rgb(54, 74, 99);
   color: white;
   border: none;
   padding: 0 1.5rem;
@@ -58,8 +59,17 @@ html, body {
 
 .switchLog.activo {
   background-color: #4d8cf3;
+  border: 0.1rem solid rgb(54, 74, 99);
   color: white;
   font-weight: bold;
+}
+
+.derecha {
+  border-radius: 0 0.6rem 0.6rem 0;
+}
+
+.izquierda {
+  border-radius: 0.6rem 0 0 0.6rem;
 }
 
 .tipoAcceso {

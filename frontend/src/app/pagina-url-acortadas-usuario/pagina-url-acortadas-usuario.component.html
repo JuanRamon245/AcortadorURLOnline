@@ -1,17 +1,26 @@
 <div class="contenedor-cards">
   <div *ngFor="let url of urls" class="card-url">
-    <p><strong>URL Acortada:</strong> https://acortadorurlonline-production.up.railway.app/api/URL/r/{{ url.shortId }}</p>
-    <p><strong>URL Original:</strong> {{ url.originalUrl }}</p>
-
-    <div class="input-usos">
-      <label><strong>Usos restantes:</strong></label>
-      <input class="imaginput" type="number" [(ngModel)]="url.nuevosUsos"min="1"max="99"(keydown)="validarInput($event, url)"(paste)="evitarPegar($event)"/>
-
+    <div class="fila-etiqueta">
+      <div class="etiqueta">URL Original:</div>
+      <p class="contenido">{{ url.originalUrl }}</p>
     </div>
+    
+    <div class="fila-etiqueta">
+      <div class="etiqueta">URL Acortada:</div>
+      <p class="contenido">https://acortadorurlonline-production.up.railway.app/api/URL/r/{{ url.shortId }}</p>
+    </div>
+    
+    <div class="fila-inferior">
+      <div class="fila-etiqueta">
+        <label class="etiqueta">Usos restantes:</label>
+        <input class="imaginput contenido" type="number" [(ngModel)]="url.nuevosUsos" min="1" max="99"
+                (keydown)="validarInput($event, url)" (paste)="evitarPegar($event)" />
+      </div>
 
-    <div class="botones">
-      <button (click)="guardarUsos(url)">Guardar</button>
-      <button (click)="confirmarEliminacion(url.shortId)">Borrar</button>
+      <div class="botones">
+        <button (click)="guardarUsos(url)">Guardar</button>
+        <button (click)="confirmarEliminacion(url.shortId)">Borrar</button>
+      </div>
     </div>
   </div>
 </div>

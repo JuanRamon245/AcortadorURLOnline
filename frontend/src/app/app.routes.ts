@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: '', component: PaginaInicialComponent },
   { path: 'pagina-urlcorta-generada', component: PaginaURLCortaGeneradaComponent, canActivate: [UrlGuard] },
   { path: 'pagina-login', component: PaginaLoginComponent, canActivate: [noAuthGuard] },
-  { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'pagina-url-acortadas-usuario', component: PaginaUrlAcortadasUsuarioComponent },
   { path: 'pagina-redireccion-incorrecta', component: PaginaRedireccionIncorrectaComponent, canActivate: [RedireccionInvalidaGuard] },
   { path: 'verificar', component: VerificacionComponent , canActivate: [TokenVerificacionGuard] },
   { path: 'restablecer-contrasena', component: RestablecerContrasenaComponent , canActivate: [TokenVerificacionGuard] },
