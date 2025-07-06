@@ -318,7 +318,8 @@ public class URLController {
                                     emailService.enviarCorreoVerificacion(correo, token);
 
                                     resultado.setResult(
-                                            ResponseEntity.ok("Verifica tu correo antes de completar el registro."));
+                                            ResponseEntity.ok(
+                                                    "Verifica tu correo electrónico antes de completar el registro."));
                                 }
                             }
 
