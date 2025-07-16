@@ -74,16 +74,53 @@ public class URLController {
         }
     }
 
-    // Método que verifica si en la web hay un usario logueado o no, permitendo
-    // registrarse en caso contrario, también envia al front la contraseña del
-    // usuario logueado.
+    // Método que devuelve la contraseña del usuario con el correo recibido
     @GetMapping("/con")
-    public ResponseEntity<String> getContrasena(HttpSession session) {
-        Object contrasena = session.getAttribute("usuarioContrasenaLogueado");
-        if (contrasena != null) {
-            return ResponseEntity.ok("" + contrasena);
+    public ResponseEntity<String> getContrasena(@RequestParam String correo) {
+        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("usuarios");
+
+        // Se crean cuenta atras para que el programa no termine y se tome una decisión
+        // final dependiendo de los resultados
+        final CountDownLatch latch = new CountDownLatch(1);
+        final String[] contrasenaEncontrada = { null };
+        final boolean[] usuarioEncontrado = { false };
+
+        // Se buscan entre todos los usuarios uno que coincida con el del correo y s
+        // eguarda su contraseña
+        usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String dbCorreo = child.child("correo").getValue(String.class);
+                    String dbContrasena = child.child("contrasena").getValue(String.class);
+
+                    if (correo.equals(dbCorreo)) {
+                        contrasenaEncontrada[0] = dbContrasena;
+                        usuarioEncontrado[0] = true;
+                        break;
+                    }
+                }
+                latch.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                latch.countDown();
+            }
+        });
+
+        // En el momento de terminar los procesos anteriores, si se ha encontrado un
+        // usuario y hay una contraseña, se envia la contraseña al frontend
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en la espera");
+        }
+
+        if (usuarioEncontrado[0]) {
+            return ResponseEntity.ok(contrasenaEncontrada[0]);
         } else {
-            return ResponseEntity.status(401).body("Registrarse");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
     }
 
@@ -404,14 +441,16 @@ public class URLController {
         return resultado;
     }
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // Método para iniciar sesión en la web usando el correo electrónico y la
     // contraseña, buscando en la bbdd en los usuarios uno que coincida con los
     // datos, en caso de hacerlo se logueará y guardará los datos del usuario en
     // la sesión para enviarlos del back al front cuando sea necesario y poderlos
     // usar.
     @PostMapping("/accederUsuario")
-    public DeferredResult<ResponseEntity<String>> iniciarSesion(@RequestBody Map<String, String> datos,
-            HttpSession session) {
+    public DeferredResult<ResponseEntity<String>> iniciarSesion(@RequestBody Map<String, String> datos) {
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
         String correo = datos.get("correo");
@@ -443,10 +482,8 @@ public class URLController {
                 String nombre = snapshot.child("nombre").getValue(String.class);
 
                 if (contrasena.equals(contrasenaGuardada)) {
-                    session.setAttribute("usuarioNombreLogueado", nombre);
-                    session.setAttribute("usuarioCorreoLogueado", correo);
-                    session.setAttribute("usuarioContrasenaLogueado", contrasena);
-                    resultado.setResult(ResponseEntity.ok("Inicio de sesión exitoso"));
+                    String token = jwtUtil.generateToken(correo, nombre);
+                    resultado.setResult(ResponseEntity.ok(token));
                 } else {
                     resultado.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta"));
                 }
@@ -462,26 +499,17 @@ public class URLController {
         return resultado;
     }
 
-    // Método para cerrar sesión en el front y en el back borrando todos los datos
-    // del usuario que estuviera.
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok("Sesión cerrada");
-    }
-
     // Método para cargar todas las urls acortadas por el usuario que esta en la
     // sesión, sus datos y todo, no tiene nigún orden.
     @GetMapping("/urls-usuario")
-    public ResponseEntity<List<Map<String, Object>>> obtenerUrlsDelUsuario(HttpSession session) {
-        Object correoObj = session.getAttribute("usuarioCorreoLogueado");
+    public ResponseEntity<List<Map<String, Object>>> obtenerUrlsDelUsuario(@RequestParam String correo) {
 
         // Se busca si hay algún usuario en la sesión
-        if (correoObj == null) {
+        if (correo == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        String correoUsuario = correoObj.toString();
+        String correoUsuario = correo.toString();
 
         // Se buscan las urls que contengan el correo del usuario de la sesión en
         // coincidencia y cargar los en el front en cards con sus datos
@@ -544,33 +572,11 @@ public class URLController {
         return ResponseEntity.ok("URL eliminada correctamente");
     }
 
-    // Método para cargar todos los datos del usuario del back al front.
-    @GetMapping("/usuario/datos")
-    public ResponseEntity<Map<String, String>> obtenerDatosUsuario(HttpSession session) {
-        // Se recoge los datos de la sesión del usuario del back
-        String nombre = (String) session.getAttribute("usuarioNombreLogueado");
-        String correo = (String) session.getAttribute("usuarioCorreoLogueado");
-        String contrasena = (String) session.getAttribute("usuarioContrasenaLogueado");
-
-        if (nombre == null || correo == null || contrasena == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-
-        // Se mandan al front
-        Map<String, String> datos = new HashMap<>();
-        datos.put("nombre", nombre);
-        datos.put("correo", correo);
-        datos.put("contrasena", contrasena);
-        return ResponseEntity.ok(datos);
-    }
-
     // Método para actualizar los datos del usuario que esta en la sesión, cambiando
     // todo lo que han introducido nuevo excepto el correo.
     @PutMapping("/usuario/actualizar")
-    public void actualizarDatosUsuario(
-            @RequestBody Map<String, String> nuevosDatos,
-            HttpServletResponse response,
-            HttpSession session) throws IOException {
+    public ResponseEntity<?> actualizarDatosUsuario(
+            @RequestBody Map<String, String> nuevosDatos) {
 
         // Recoge los datos enviados del front
         String nombre = nuevosDatos.get("nombre");
@@ -578,9 +584,7 @@ public class URLController {
         String contrasena = nuevosDatos.get("contrasena");
 
         if (nombre == null || correo == null || contrasena == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Algún campo está vacío");
-            return;
+            return ResponseEntity.badRequest().body("Algún campo está vacío");
         }
 
         // Se busca un usuario que coincida el correo con la bbdd para ponerle los
@@ -590,6 +594,11 @@ public class URLController {
                 .getReference("usuarios")
                 .child(correoCodificado);
 
+        // Se crea una variable futura para no mezclarse con los eventos de firebase y
+        // poder mandar la información finalmente cuando las peticiones de firebase se
+        // terminen
+        CompletableFuture<ResponseEntity<?>> future = new CompletableFuture<>();
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -597,39 +606,37 @@ public class URLController {
                     Map<String, Object> actualizaciones = new HashMap<>();
                     actualizaciones.put("nombre", nombre);
                     actualizaciones.put("contrasena", contrasena);
+
+                    // Se actualiza los datos en firebase
                     ref.updateChildrenAsync(actualizaciones);
 
-                    session.setAttribute("usuarioNombreLogueado", nombre);
-                    session.setAttribute("usuarioCorreoLogueado", correo);
-                    session.setAttribute("usuarioContrasenaLogueado", contrasena);
+                    // Se genera un nuevo token con los datos actualizados
+                    String nuevoToken = jwtUtil.generateToken(correo, nombre);
 
-                    try {
-                        response.setStatus(HttpServletResponse.SC_OK);
-                        response.getWriter().write("Datos actualizados correctamente");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    Map<String, String> respuesta = new HashMap<>();
+                    respuesta.put("token", nuevoToken);
+
+                    future.complete(ResponseEntity.ok(respuesta));
 
                 } else {
-                    try {
-                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        response.getWriter().write("Usuario no encontrado");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    future.complete(ResponseEntity.badRequest().body("Usuario no encontrado"));
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                try {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    response.getWriter().write("Error al acceder a Firebase");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                future.complete(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error al acceder a Firebase"));
             }
         });
+
+        // Se envia al forntend el error o nuevo toquen generados
+        try {
+            return future.get();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al procesar la solicitud");
+        }
     }
 
     // Método para enviar un correo para cambiar la contraseña del usuario que la ha

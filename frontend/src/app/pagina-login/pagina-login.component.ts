@@ -69,8 +69,10 @@ export class PaginaLoginComponent {
       } else {
          this.URLServicio.acceder(this.correo, this.contrasena).subscribe({
           next: (respuesta: string) => {
-            if (respuesta.includes('Inicio de sesión exitoso')) {
-              window.location.href = '/AcortadorURLOnline/';
+            // Se obtiene un token del backend en forma de Jwt que se guarda en el frontend codificado
+            if (respuesta.length > 100 && respuesta.includes('.')) {
+              localStorage.setItem('jwt', respuesta);
+              window.location.href = '/';
             } else {
               this.mensaje = respuesta;
             }

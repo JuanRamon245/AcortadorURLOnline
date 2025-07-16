@@ -51,8 +51,16 @@
 
     <div class="form-group">
       <label><strong>Contraseña:</strong></label>
-      <input class="imaginput" type="text" [(ngModel)]="contrasenaUsuario" maxlength="30" />
+      <div class="inputConIcono">
+        <input
+          class="imaginput" [type]="mostrarContrasenaModal ? 'text' : 'password'" [(ngModel)]="contrasenaUsuario" maxlength="30"/>
+        <span
+          type="button"(click)="mostrarContrasenaModal = !mostrarContrasenaModal"class="iconoOjo material-symbols-outlined">
+          {{ mostrarContrasenaModal ? 'visibility' : 'visibility_off' }}
+        </span>
+      </div>
     </div>
+
     
     <button class="guardarCerrar" (click)="guardarCambiosUsuario()">Guardar cambios</button>
   </div>

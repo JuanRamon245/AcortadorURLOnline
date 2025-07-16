@@ -3,6 +3,7 @@ import { ServicioURLService } from '../services/servicio-url.service';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-pagina-url-acortadas-usuario',
@@ -17,17 +18,46 @@ export class PaginaUrlAcortadasUsuarioComponent {
   tipoMensaje: 'exito' | 'error' = 'exito';
   mostrarModal: boolean = false;
   idParaEliminar: string | null = null;
+  correoUsuario: string = '';
 
   constructor(private servicioURL: ServicioURLService) {}
 
+  verificarToken(): void {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        const ahora = Math.floor(Date.now() / 1000);
+    
+        if (decoded.exp && decoded.exp < ahora) {
+          this.correoUsuario = '';
+          localStorage.removeItem('jwt');
+        } else {
+          this.correoUsuario = decoded.sub;
+        }
+      } catch (error) {
+        console.error('Token inválido:', error);
+        this.correoUsuario = '';
+        localStorage.removeItem('jwt');
+      }
+    } else {
+      this.correoUsuario = '';
+    }
+  }
+
   // Método para cargar las urls acortadas del usuario al entrar a la página
   ngOnInit(): void {
-    this.cargarUrls();
+    this.verificarToken();
+    if (this.correoUsuario.trim() === ''){
+      this.mostrarMensaje('No hay usuario logueado');
+    } else {
+      this.cargarUrls(this.correoUsuario);
+    }
   }
 
   // Método que carga las urls del usuario que esté logueado en la sesión
-  cargarUrls(): void {
-    this.servicioURL.getUrlsDelUsuario().subscribe({
+  cargarUrls(correo: string): void {
+    this.servicioURL.getUrlsDelUsuario(correo).subscribe({
       next: (res) => {
         this.urls = res.map((url) => ({
           ...url,
@@ -52,7 +82,7 @@ export class PaginaUrlAcortadasUsuarioComponent {
     this.servicioURL.actualizarUsos(url.shortId, usos).subscribe({
       next: () => {
         this.mostrarMensaje('Usos actualizados correctamente');
-        this.cargarUrls();
+        this.cargarUrls(this.correoUsuario);
       },
       error: () => {
         this.mostrarMensaje('Error al actualizar usos', 'error');
@@ -79,7 +109,7 @@ export class PaginaUrlAcortadasUsuarioComponent {
     this.servicioURL.eliminarUrl(this.idParaEliminar).subscribe({
       next: () => {
         this.mostrarMensaje('URL eliminada correctamente');
-        this.cargarUrls();
+        this.cargarUrls(this.correoUsuario);
       },
       error: () => {
         this.mostrarMensaje('Error al eliminar la URL', 'error');

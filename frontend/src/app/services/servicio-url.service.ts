@@ -41,13 +41,14 @@ export class ServicioURLService {
   verificarUrl(url: string): Observable<string> {
     const urlCodificada = encodeURIComponent(url);
     return this.http.get(`https://acortadorurlonline-production.up.railway.app/api/URL/verificar?url=${urlCodificada}`, {
-      responseType: 'text'
+      responseType: 'text',
+      withCredentials: true
     });
   }
 
   // Método para poderse comunicar con el back y generar una url acortada en base a la url original
   acortarUrl(url: string, correo: string): Observable<string> {
-    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/acortar', { url, correo }, { responseType: 'text' });
+    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/acortar', { url, correo }, { responseType: 'text', withCredentials: true });
   }
 
   // Método para poderse comunicar con el back y crear un usuario que necesite verificarse
@@ -59,7 +60,7 @@ export class ServicioURLService {
   // Método para poderse comunicar con el back y acceder el usuario a la web en caso de que sus datos coincidan
   acceder(correo: string, contrasena: string): Observable<string> {
     const body = { correo, contrasena };
-    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/accederUsuario', body, { responseType: 'text', withCredentials: true });
+    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/accederUsuario', body, { responseType: 'text' });
   }
 
   // Método para poderse comunicar con el back y cerrar sesión eliminando los datos en el navegador del usuario
@@ -71,20 +72,20 @@ export class ServicioURLService {
   }
 
   // Método para poderse comunicar con el back y obtener todas las urls que esten asociados al usuairo que esté en la sesión
-  getUrlsDelUsuario(): Observable<any[]> {
-    return this.http.get<any[]>('https://acortadorurlonline-production.up.railway.app/api/URL/urls-usuario', {
+  getUrlsDelUsuario(correo: string): Observable<any[]> {
+    return this.http.get<any[]>(`https://acortadorurlonline-production.up.railway.app/api/URL/urls-usuario?correo=${correo}`, {
       withCredentials: true
     });
   }
 
   // Método para poderse comunicar con el back y variar el número de usos de la url acortada por los nuevos introducidos por el usuario
   actualizarUsos(shortId: string, usos: number): Observable<string> {
-    return this.http.put(`https://acortadorurlonline-production.up.railway.app/api/URL/actualizar-usos/${shortId}`, { usos }, { responseType: 'text' });
+    return this.http.put(`https://acortadorurlonline-production.up.railway.app/api/URL/actualizar-usos/${shortId}`, { usos }, { responseType: 'text', withCredentials: true });
   }
 
   // Método para poderse comunicar con el back y eliminar la url acortada seleccionada
   eliminarUrl(shortId: string): Observable<string> {
-    return this.http.delete(`https://acortadorurlonline-production.up.railway.app/api/URL/eliminar/${shortId}`, { responseType: 'text' });
+    return this.http.delete(`https://acortadorurlonline-production.up.railway.app/api/URL/eliminar/${shortId}`, { responseType: 'text', withCredentials: true });
   }
 
   private haAcortado: boolean = false;
@@ -100,21 +101,20 @@ export class ServicioURLService {
   }
 
   // Método para poderse comunicar con el back y obtener los datos del usuario de la sesión
-  getDatosUsuario(): Observable<{ nombre: string, correo: string, contrasena: string }> {
-    return this.http.get<{ nombre: string, correo: string, contrasena: string }>(
-      'https://acortadorurlonline-production.up.railway.app/api/URL/usuario/datos',
-      { withCredentials: true }
-    );
+  obtenerContrasenaUsuario(correo: string): Observable<string> {
+    return this.http.get(`https://acortadorurlonline-production.up.railway.app/api/URL/con?correo=${correo}`, {
+      responseType: 'text',
+      withCredentials: true
+    });
   }
 
   // Método para poderse comunicar con el back y actualizar los datos del usuario de la sesión por los nuevos introducidos
-  actualizarDatosUsuario(datos: { nombre: string, correo: string, contrasena: string }): Observable<string> {
-    return this.http.put(
+  actualizarDatosUsuario(datos: { nombre: string, correo: string, contrasena: string }): Observable<{ token: string }> {
+    return this.http.put<{ token: string }>(
       'https://acortadorurlonline-production.up.railway.app/api/URL/usuario/actualizar',
-      datos,
+       datos,
       {
-        withCredentials: true,
-        responseType: 'text'
+        withCredentials: true
       }
     );
   }
@@ -122,13 +122,14 @@ export class ServicioURLService {
   // Método para poderse comunicar con el back y verificar el usuario que ha solicitado crear la cuenta
   verificarUsuario(token: string): Observable<string> {
     return this.http.get(`https://acortadorurlonline-production.up.railway.app/api/URL/verificarUsuario?token=${token}`, {
-      responseType: 'text'
+      responseType: 'text',
+      withCredentials: true
     });
   }
 
   // Método para poderse comunicar con el back y enviar un correo al usuario que solicite recuperar su contraseña
   enviarCorreoRecuperar(correo: string): Observable<any> {
-    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/enviarCorreoRecuperacion', { correo }, { responseType: 'text' });
+    return this.http.post('https://acortadorurlonline-production.up.railway.app/api/URL/enviarCorreoRecuperacion', { correo }, { responseType: 'text', withCredentials: true });
   }
 
   // Método para poderse comunicar con el back y cambiar la contraseña del usuario que solicite recuperar la contraseña

@@ -1,40 +1,40 @@
 .contenedor-redireccion {
-  padding: 8rem 1rem;
+  padding: 13vh 3vh;
   text-align: center;
-  max-width: 70rem;
-  margin: 5rem auto;
+  max-width: 120vh;
+  margin: 8vh auto;
   height: auto;
 
   h2 {
-    font-size: 2rem;
+    font-size: 3.4vh;
     color: rgb(83, 62, 62);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-bottom: 2rem;
+    margin-bottom: 5vh;
   }
 
   .material-symbols-outlined {
-    font-size: 2rem;
+    font-size: 3vh;
     color: rgb(83, 62, 62);
   }
 
   button {
-    height: 3.2rem;
+    height: 6vh;
     background-color: #4d8cf3;
     color: white;
     border: none;
-    padding: 0 1.5rem;
-    border-radius: 0.2rem;
+    padding: 0 3vh;
+    border-radius: 0.4vh;
     cursor: pointer;
-    font-size: 1.4rem;
+    font-size: 2.3vh;
     font-family: 'Ubuntu', sans-serif;
     transition: background-color 0.3s;
     box-sizing: border-box;
-    border: 0.15rem solid rgb(40, 73, 112);
-    box-shadow: -0.3rem 0.3rem 0 rgb(54, 74, 99);
+    border: 0.2vh solid rgb(40, 73, 112);
+    box-shadow: -0.6vh 0.6vh 0 rgb(54, 74, 99);
   }
 
   button:hover {
     background-color: rgb(54, 74, 99);
-    box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
+    box-shadow: -0.6vh 0.6vh 0 rgb(81, 134, 200);
   }
 }

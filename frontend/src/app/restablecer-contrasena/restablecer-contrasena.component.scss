@@ -6,10 +6,10 @@
 
 .contenedorRestablecerContrasena {
   margin: 0;
-  padding: 1.5rem 1.5rem;
+  padding: 3vh 3vh;
   width: 100%;
   height: 100%;
-  border-radius: 0.6rem;
+  border-radius: 1vh;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -19,50 +19,50 @@
 
 .titulo {
   text-align: center;
-  padding: 0.6rem 1rem;
-  margin-bottom: 10rem;
+  padding: 0.9vh 1.5vh;
+  margin-bottom: 16.5vh;
   color: #ffffff;
   background-color: #4d8cf3;
   border: none;
-  border-radius: 0.7rem;
-  font-size: 3rem;
+  border-radius: 1.05vh;
+  font-size: 8.5vh;
   font-family: 'Ubuntu', sans-serif;
-  border: 0.1rem solid rgb(40, 73, 112);
-  box-shadow: -0.6rem 0.6rem 0 rgb(54, 74, 99);
+  border: 0.4vh solid rgb(40, 73, 112);
+  box-shadow: -0.9vh 0.9vh 0 rgb(54, 74, 99);
   cursor: pointer;
 }
 
 p {
-  font-size: 2rem;
+  font-size: 5vh;
   color: rgb(83, 62, 62);
   font-weight: bold;
-  margin-bottom: 1.5rem;
-  margin-left: 1.5rem;
+  margin-bottom: 2vh;
+  margin-left: 3vh;
   font-family: 'Ubuntu', sans-serif;
 }
 
 input {
   width: 100%;
-  height: 3.2rem;
-  padding: 0 1rem;
-  font-size: 1.4rem;
-  border-radius: 0.4rem 0 0 0.4rem;
-  border: 0.1rem solid #ccc;
-  box-shadow: -0.3rem 0.3rem 0 #ccc;
+  height: 7.2vh;
+  padding: 0 2vh;
+  font-size: 3.5vh;
+  border-radius: 0.8vh 0 0 0.8vh;
+  border: 0.3vh solid #ccc;
+  box-shadow: -0.8vh 0.8vh 0 #ccc;
   font-family: 'Gill Sans', 'Girgb(170, 170, 170)ans MT', Calibri, 'Trebuchet MS', sans-serif;
   box-sizing: border-box;
 }
 
 button {
-  height: 3.2rem;
+  height: 7.2vh;
   background-color: #4d8cf3;
   color: white;
-  border: 0.1rem solid rgb(40, 73, 112);
-  box-shadow: -0.3rem 0.3rem 0 rgb(54, 74, 99);
-  padding: 0 1.5rem;
-  border-radius: 0 0.4rem 0.4rem 0;
+  border: 0.3vh solid rgb(40, 73, 112);
+  box-shadow: -0.8vh 0.8vh 0 rgb(54, 74, 99);
+  padding: 0 2.5vh;
+  border-radius: 0 0.8vh 0.8vh 0;
   cursor: pointer;
-  font-size: 1.4rem;
+   font-size: 3.5vh;
   font-family: 'Ubuntu', sans-serif;
   transition: background-color 0.3s;
   box-sizing: border-box;
@@ -72,11 +72,11 @@ button {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 1rem;
-  margin-top: 3rem;
+  gap: 3vh;
+  margin-top: 9vh;
 }
 
 button:hover {
   background-color: rgb(54, 74, 99);
-  box-shadow: -0.3rem 0.3rem 0 rgb(81, 134, 200);
+  box-shadow: -0.8vh 0.8vh 0 rgb(81, 134, 200);
 }
